@@ -18,7 +18,11 @@ public function login(LoginUserRequest $request)
             return response()->json([
             'status' => true,
             'message' => 'Welcome ' . $user->name . ' ' . $user->last_name,
-            'data' => $user,
+            'data' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ],
             'auth_token' => $user->createToken('auth_token')->plainTextToken,
         ], 200);
         }
@@ -30,7 +34,7 @@ return response()->json([
 
 
 public function logout(){
-Auth::user()->currentAccessToken()->delete();
+Auth::user()->tokens()->delete();
 
     return response()->json([
         'Message' => 'The user has been successfully logged out'
