@@ -2,6 +2,7 @@
 import { lazy, Suspense } from "react";
 import "./index.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
 
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
@@ -22,15 +23,18 @@ function App() {
                     <Routes>
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/quiz" element={<Quiz />} />
-                        <Route path="/courses" element={<Courses />} />
-                        <Route
-                            path="/admin/course-management"
-                            element={<CourseManagement />}
-                        />
-                        <Route path="/admin/users" element={<Users />} />
+
+                        <Route element={<Layout />}>
+                            <Route path="/" element={<Dashboard />} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/quiz" element={<Quiz />} />
+                            <Route path="/courses" element={<Courses />} />
+                            <Route
+                                path="/admin/course-management"
+                                element={<CourseManagement />}
+                            />
+                            <Route path="/admin/users" element={<Users />} />
+                        </Route>
                     </Routes>
                 </Suspense>
             </BrowserRouter>

@@ -1,1 +1,14 @@
 @import "./scss/pages/register.scss";
+@import "./scss/components/sidebar.scss";
+@import "./scss/components/layout.scss";
+@import "./scss/components/buttons.scss";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}

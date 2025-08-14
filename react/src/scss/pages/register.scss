@@ -1,3 +1,77 @@
-body {
-    background-color: beige;
+.auth-wrapper {
+    background: linear-gradient(to top, #2a5298, #141e30);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .form-wrapper {
+        width: 560px;
+        background-color: white;
+        padding: 100px;
+        .auth-logo {
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 40px;
+            color: #344054;
+            text-align: center;
+        }
+        .auth-heading {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 40px;
+            color: #344054;
+            text-align: center;
+        }
+        .input-wrapper {
+            margin-top: 16px;
+            label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                font-size: 16px;
+                color: #333;
+            }
+            input {
+                margin-top: 8px;
+                width: 100%;
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+            input:focus {
+                border-color: #4f46e5;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            }
+        }
+        .button-wrapper {
+            margin-top: 16px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+
+        .login-text {
+            text-align: center;
+            font-size: 16px;
+            color: #344054;
+            margin-top: 16px;
+            span {
+                color: #2a5298;
+                font-weight: 600;
+                text-decoration: none;
+                margin-left: 4px;
+                transition: color 0.3s;
+                cursor: pointer;
+            }
+            span:hover {
+                color: #3730a3;
+                text-decoration: underline;
+            }
+        }
+    }
 }
