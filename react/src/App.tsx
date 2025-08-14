@@ -1,25 +1,39 @@
-import { useQuery } from "@tanstack/react-query";
-import "./App.css";
-import { getUsers } from "./services";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { lazy, Suspense } from "react";
+import "./index.scss";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+const Register = lazy(() => import("./pages/Register"));
+const Login = lazy(() => import("./pages/Login"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const Courses = lazy(() => import("./pages/Courses"));
+
+// Admin
+const CourseManagement = lazy(() => import("./pages/admin/CourseManagement"));
+const Users = lazy(() => import("./pages/admin/Users"));
 
 function App() {
-    // Get users
-    const {
-        data: users,
-        isLoading: usersIsLoading,
-        error: usersError,
-    } = useQuery({
-        queryKey: ["users"],
-        queryFn: getUsers,
-    });
-
-    if (usersIsLoading) return <p>Loading...</p>;
-    if (usersError) return <p>{usersError?.message}</p>;
-    if (!users) return <p>No data found.</p>;
-
     return (
         <>
-            <h1>Boris car</h1>
+            <BrowserRouter>
+                <Suspense fallback={<h2>Loading...</h2>}>
+                    <Routes>
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/quiz" element={<Quiz />} />
+                        <Route path="/courses" element={<Courses />} />
+                        <Route
+                            path="/admin/course-management"
+                            element={<CourseManagement />}
+                        />
+                        <Route path="/admin/users" element={<Users />} />
+                    </Routes>
+                </Suspense>
+            </BrowserRouter>
         </>
     );
 }

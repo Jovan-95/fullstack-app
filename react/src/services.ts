@@ -1,5 +1,4 @@
 // Get HTTP method
-
 export async function getUsers() {
     try {
         const res = await fetch(`http://127.0.0.1:8000/api/admin`);
