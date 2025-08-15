@@ -1,12 +1,13 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 
-
-
+///////////////////////////////////////////AUTH ROUTES
 
 Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');;
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('forgot-password', [\App\Http\Controllers\AuthController::class, 'forgot']);
+Route::post('reset-password', [\App\Http\Controllers\AuthController::class, 'reset']);
+Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
