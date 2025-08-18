@@ -11,17 +11,18 @@ function Register() {
 
     const [userObj, setUserObj] = useState<RegisterFormUser>({
         name: "",
+        username: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        gender: "",
+        password_confirmation: "",
+        gender_id: 0,
     });
 
     // HTTP POST
     const addUserMutation = useMutation({
         mutationFn: registerNewUser,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["users"] });
+            queryClient.invalidateQueries({ queryKey: ["register"] });
         },
         onError: (err) => {
             alert("Registration failed!");
@@ -43,15 +44,15 @@ function Register() {
             userObj.name === "" ||
             userObj.email === "" ||
             userObj.password === "" ||
-            userObj.confirmPassword === ""
+            userObj.password_confirmation === ""
         )
             return alert("Fill all fields!");
 
-        if (userObj.password.length < 6) {
+        if (userObj.password.length < 8) {
             return alert("Password is too short!");
         }
 
-        if (userObj.password !== userObj.confirmPassword) {
+        if (userObj.password !== userObj.password_confirmation) {
             return alert("Passwords are not matching!");
         }
 
@@ -62,25 +63,27 @@ function Register() {
         // User for sending
         const newUser: User = {
             name: userObj.name,
+            username: userObj.username,
             email: userObj.email,
             password: userObj.password,
-            roles: ["student"],
-            gender: userObj.gender,
-            auth_token: Date.now().toLocaleString(),
+            password_confirmation: userObj.password_confirmation,
+            gender_id: Number(userObj.gender_id),
         };
 
         console.log("Register", newUser);
-        // addUserMutation.mutate(newUser);
-        // navigate("/login");
+
+        addUserMutation.mutate(newUser);
+        navigate("/login");
         alert("Your acc is waiting for approval");
 
         // reset fields
         setUserObj({
             name: "",
+            username: "",
             email: "",
             password: "",
-            confirmPassword: "",
-            gender: "",
+            password_confirmation: "",
+            gender_id: 0,
         });
     }
 
@@ -90,12 +93,22 @@ function Register() {
                 <div className="auth-logo">LMS</div>
                 <div className="auth-heading">Register</div>
                 <div className="input-wrapper">
-                    <label>Username</label>
+                    <label>Name</label>
                     <input
                         onChange={(e) =>
                             setUserObj({ ...userObj, name: e.target.value })
                         }
                         value={userObj.name}
+                        type="text"
+                    />
+                </div>
+                <div className="input-wrapper">
+                    <label>Username</label>
+                    <input
+                        onChange={(e) =>
+                            setUserObj({ ...userObj, username: e.target.value })
+                        }
+                        value={userObj.username}
                         type="text"
                     />
                 </div>
@@ -125,10 +138,10 @@ function Register() {
                         onChange={(e) =>
                             setUserObj({
                                 ...userObj,
-                                confirmPassword: e.target.value,
+                                password_confirmation: e.target.value,
                             })
                         }
-                        value={userObj.confirmPassword}
+                        value={userObj.password_confirmation}
                         type="password"
                     />
                 </div>
@@ -140,7 +153,7 @@ function Register() {
                                 onChange={(e) =>
                                     setUserObj({
                                         ...userObj,
-                                        gender: e.target.value,
+                                        gender_id: 1,
                                     })
                                 }
                                 type="radio"
@@ -156,7 +169,7 @@ function Register() {
                                 onChange={(e) =>
                                     setUserObj({
                                         ...userObj,
-                                        gender: e.target.value,
+                                        gender_id: 2,
                                     })
                                 }
                                 type="radio"

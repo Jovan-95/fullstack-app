@@ -87,13 +87,6 @@ function Login() {
         //     return;
         // }
 
-        // // Keeping user in Redux and in Local
-        // if (user) {
-        //     alert("Credentials are matching!");
-        //     dispatch(addLoggedUser(user));
-        //     navigate("/");
-        // }
-
         // User for sending
         const loggedUser: LoginFormUser = {
             email: loginUserObj.email,

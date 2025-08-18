@@ -18,7 +18,7 @@ export async function getUsers() {
 // Post HTTP method. Ask Boris for route!!!
 export async function registerNewUser(user: User) {
     try {
-        const res = await fetch(`${API_URL}/users`, {
+        const res = await fetch(`${API_URL}/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

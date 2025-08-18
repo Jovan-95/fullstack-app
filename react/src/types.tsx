@@ -1,20 +1,21 @@
 // Form register user fields
 export type RegisterFormUser = {
     name: string;
+    username: string;
     email: string;
     password: string;
-    confirmPassword: string;
-    gender: string;
+    password_confirmation: string;
+    gender_id: number;
 };
 
 // User
 export type User = {
     name: string;
+    username: string;
     email: string;
     password: string;
-    roles: string[];
-    auth_token: string | null;
-    gender: string;
+    password_confirmation: string;
+    gender_id: number;
 };
 
 // Login form user
