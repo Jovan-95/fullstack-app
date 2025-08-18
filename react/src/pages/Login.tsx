@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginFormUser, User } from "../types";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "../services";
+import { getUsers } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
 
 function Login() {

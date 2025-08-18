@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { RegisterFormUser, User } from "../types";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { registerNewUser } from "../services";
+import { registerNewUser } from "../services/userServices";
 
 function Register() {
     const navigate = useNavigate();
