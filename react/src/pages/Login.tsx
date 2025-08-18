@@ -22,7 +22,7 @@ function Login() {
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
-    console.log("Logged user", loggedUser);
+    // console.log("Logged user", loggedUser);
 
     // Get users. !!! Check HTTP with Boris to get users from BE
     // const {
