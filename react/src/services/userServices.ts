@@ -1,8 +1,7 @@
-import { User } from "../types";
+import { LoginFormUser, User } from "../types";
 
 const API_URL = "http://127.0.0.1:8000/api";
 
-// USERS
 // Get HTTP method. Ask Boris for route!!!
 export async function getUsers() {
     try {
@@ -29,6 +28,25 @@ export async function registerNewUser(user: User) {
         if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
         const data = await res.json();
         // console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Login
+export async function loginUser(user: LoginFormUser) {
+    try {
+        const res = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        });
+        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+        const data = await res.json();
+        console.log(data);
         return data;
     } catch (err) {
         console.log(err);

@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginFormUser, User } from "../types";
+import { LoginFormUser } from "../types";
 import { useDispatch } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "../services/userServices";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getUsers, loginUser } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
 
     const [loginUserObj, setLoginUserObj] = useState<LoginFormUser>({
         email: "",
@@ -26,43 +27,62 @@ function Login() {
     //     queryFn: getUsers,
     // });
 
+    // HTTP POST
+    const loginUserMutation = useMutation({
+        mutationFn: loginUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["login"] });
+        },
+        onError: (err) => {
+            alert("Login failed!");
+        },
+    });
+
     // Login
     function handleUserLogin(e: React.FormEvent) {
         e.preventDefault();
 
         // Comparing login credentials with registered users
-        const user = users.find(
-            (user: User) =>
-                user.email === loginUserObj.email &&
-                user.password === loginUserObj.password
-        );
+        // const user = users.find(
+        //     (user: User) =>
+        //         user.email === loginUserObj.email &&
+        //         user.password === loginUserObj.password
+        // );
 
-        if (!user) {
-            alert("Wrong credentials!");
-            return;
-        }
+        // if (!user) {
+        //     alert("Wrong credentials!");
+        //     return;
+        // }
 
-        if (user.status === "banned") {
-            alert("You are banned!");
-            return;
-        }
+        // if (user.status === "banned") {
+        //     alert("You are banned!");
+        //     return;
+        // }
 
-        if (user.status === "rejected") {
-            alert("You are rejected!");
-            return;
-        }
+        // if (user.status === "rejected") {
+        //     alert("You are rejected!");
+        //     return;
+        // }
 
-        if (user.status === "pending") {
-            alert("Your registration is waiting for approval!");
-            return;
-        }
+        // if (user.status === "pending") {
+        //     alert("Your registration is waiting for approval!");
+        //     return;
+        // }
 
-        // Keeping user in Redux and in Local
-        if (user) {
-            alert("Credentials are matching!");
-            dispatch(addLoggedUser(user));
-            navigate("/");
-        }
+        // // Keeping user in Redux and in Local
+        // if (user) {
+        //     alert("Credentials are matching!");
+        //     dispatch(addLoggedUser(user));
+        //     navigate("/");
+        // }
+
+        // User for sending
+        const loggedUser: LoginFormUser = {
+            email: loginUserObj.email,
+            password: loginUserObj.password,
+        };
+
+        loginUserMutation.mutate(loggedUser);
     }
 
     // Error handling
