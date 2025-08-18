@@ -87,10 +87,45 @@ if ($status === Password::PASSWORD_RESET) {
         'error_code' => $status
     ], 422);
 }
+/////////////////////////////////////////////////////////////////////REGISTER USER
 
+public function register(RegisterUserRequest $request)
+{
+    $maleImage   = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/man.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWM3M2U5OC0zOGE5LTRlODItYWMyZS1iYmZiZDQzNjExYjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhdmF0YXJzL21hbi5wbmciLCJpYXQiOjE3NTU1MjA2NDIsImV4cCI6MTc4NzA1NjY0Mn0.wf-C0F4t0218bmjsev5D85po75eh7YB2jQ5xlmWhKS4";
+    $femaleImage = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/woman.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWM3M2U5OC0zOGE5LTRlODItYWMyZS1iYmZiZDQzNjExYjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhdmF0YXJzL3dvbWFuLnBuZyIsImlhdCI6MTc1NTUyMzUyNiwiZXhwIjoxNzg3MDU5NTI2fQ.T2CDmfDKYTxx3iGMa8leYfLR9QEExGLBpNtV7U-_8FA";
 
-public function register(){
-    
+    $profileImage = match ((int) $request->gender_id) {
+        1 => $maleImage,
+        2 => $femaleImage,
+        default => null,
+    };
+
+    $user = User::create([
+        'name'          => $request->name,
+        'email'         => $request->email,
+        'username'      => $request->username,
+        'gender_id'     => $request->gender_id,
+        'password'      => Hash::make($request->password),
+        'profile_image' => $profileImage,
+    ]);
+
+    $user->assignRole('student');
+    $user->load('gender');
+
+    return response()->json([
+        'status'  => true,
+        'message' => 'User registered successfully',
+        'data'    => [
+            'id'            => $user->id,
+            'name'          => $user->name,
+            'email'         => $user->email,
+            'username'      => $user->username,
+            'gender'        => $user->gender,
+            'profile_image' => $user->profile_image,
+            'roles'         => $user->getRoleNames(),
+        ],
+        
+    ], 201);
 }
 
 

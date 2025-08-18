@@ -11,7 +11,7 @@ class RegisterUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'          => ['required','string','min:2','max:100'],
+            'email'         => ['required','email:rfc,dns','max:255','unique:users,email'],
+            'username'      => ['required','min:3','max:30','unique:users,username'],
+            'password'      => ['required','string','min:8','confirmed'],
+            'gender_id'     => ['required','integer','in:1,2','exists:genders,id'],
+            'profile_image' => ['nullable','url','max:2048'],
+        ];
+    }
+
+     public function messages(): array
+    {
+        return [
+            'password.confirmed' => 'Password confirmation does not match.',
         ];
     }
 }
