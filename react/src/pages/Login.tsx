@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginFormUser } from "../types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUsers, loginUser } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
+import { RootState } from "../redux/store";
 
 function Login() {
     const navigate = useNavigate();
@@ -17,6 +18,12 @@ function Login() {
         password: "",
     });
 
+    // Get logged user from Redux
+    const loggedUser = useSelector(
+        (state: RootState) => state.auth.loggedInUser
+    );
+    console.log("Logged user", loggedUser);
+
     // Get users. !!! Check HTTP with Boris to get users from BE
     // const {
     //     data: users,
@@ -27,11 +34,22 @@ function Login() {
     //     queryFn: getUsers,
     // });
 
-    // HTTP POST
+    // HTTP POST, BE vraca Usera
     const loginUserMutation = useMutation({
         mutationFn: loginUser,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["login"] });
+        onSuccess: (data) => {
+            if (data && data.status) {
+                // Dispatch u Redux
+                dispatch(
+                    addLoggedUser({
+                        ...data.data, // id, name, email, roles
+                        auth_token: data.auth_token, // auth_token iz response
+                    })
+                );
+
+                // Navigacija na home
+                navigate("/");
+            }
         },
         onError: (err) => {
             alert("Login failed!");

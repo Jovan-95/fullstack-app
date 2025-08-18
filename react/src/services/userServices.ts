@@ -22,12 +22,13 @@ export async function registerNewUser(user: User) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Accept: "application/json",
             },
             body: JSON.stringify(user),
         });
         if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
         const data = await res.json();
-        // console.log(data);
+        console.log(data);
         return data;
     } catch (err) {
         console.log(err);

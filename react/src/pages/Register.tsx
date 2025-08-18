@@ -10,10 +10,11 @@ function Register() {
     const queryClient = useQueryClient();
 
     const [userObj, setUserObj] = useState<RegisterFormUser>({
-        username: "",
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
+        gender: "",
     });
 
     // HTTP POST
@@ -39,7 +40,7 @@ function Register() {
 
         // Fields validation
         if (
-            userObj.username === "" ||
+            userObj.name === "" ||
             userObj.email === "" ||
             userObj.password === "" ||
             userObj.confirmPassword === ""
@@ -60,24 +61,26 @@ function Register() {
 
         // User for sending
         const newUser: User = {
-            id: Date.now().toString(),
-            username: userObj.username,
+            name: userObj.name,
             email: userObj.email,
             password: userObj.password,
-            role: "user",
-            status: "pending",
+            roles: ["student"],
+            gender: userObj.gender,
+            auth_token: Date.now().toLocaleString(),
         };
 
-        addUserMutation.mutate(newUser);
-        navigate("/login");
+        console.log("Register", newUser);
+        // addUserMutation.mutate(newUser);
+        // navigate("/login");
         alert("Your acc is waiting for approval");
 
         // reset fields
         setUserObj({
-            username: "",
+            name: "",
             email: "",
             password: "",
             confirmPassword: "",
+            gender: "",
         });
     }
 
@@ -90,9 +93,9 @@ function Register() {
                     <label>Username</label>
                     <input
                         onChange={(e) =>
-                            setUserObj({ ...userObj, username: e.target.value })
+                            setUserObj({ ...userObj, name: e.target.value })
                         }
-                        value={userObj.username}
+                        value={userObj.name}
                         type="text"
                     />
                 </div>
@@ -128,6 +131,42 @@ function Register() {
                         value={userObj.confirmPassword}
                         type="password"
                     />
+                </div>
+                <div className="input-wrapper">
+                    <label>Gender</label>
+                    <div className="radio-buttons">
+                        <label className="radio-label">
+                            <input
+                                onChange={(e) =>
+                                    setUserObj({
+                                        ...userObj,
+                                        gender: e.target.value,
+                                    })
+                                }
+                                type="radio"
+                                name="gender"
+                                value="male"
+                            />
+                            <span className="custom-radio"></span>
+                            Male
+                        </label>
+
+                        <label className="radio-label">
+                            <input
+                                onChange={(e) =>
+                                    setUserObj({
+                                        ...userObj,
+                                        gender: e.target.value,
+                                    })
+                                }
+                                type="radio"
+                                name="gender"
+                                value="female"
+                            />
+                            <span className="custom-radio"></span>
+                            Female
+                        </label>
+                    </div>
                 </div>
                 <div className="button-wrapper">
                     <button
