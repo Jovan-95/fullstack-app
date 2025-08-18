@@ -22,6 +22,8 @@ public function login(Request $request)
         $user = Auth::user();
 
         if ($user) {
+
+             $user->load('gender');
             return response()->json([
             'status' => true,
             'message' => 'Welcome ' . $user->name . ' ' . $user->last_name,
@@ -29,6 +31,9 @@ public function login(Request $request)
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'profile_image' => $user->profile_image,
+            'username' => $user->username,
+           'gender' => $user->gender,
             'roles' => $user->getRoleNames()
         ],
             'auth_token' => $user->createToken('auth_token')->plainTextToken,

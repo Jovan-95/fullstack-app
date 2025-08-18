@@ -46,6 +46,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+      public function gender()
+    {
+        return $this->belongsTo(Gender::class);
+    }
+
     public function sendPasswordResetNotification($token)
 {
     $frontendUrl = rtrim(config('app.frontend_url'), '/');

@@ -14,8 +14,15 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('username')->unique();
+           $table->string('profile_image', 2048)->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('gender_id')->nullable();
+             $table->foreign('gender_id')
+            ->references('id')
+            ->on('genders')
+            ->onDelete('cascade');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
