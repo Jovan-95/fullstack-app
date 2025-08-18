@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Quiz = lazy(() => import("./pages/Quiz"));
@@ -23,6 +24,10 @@ function App() {
                     <Routes>
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/forgot-password"
+                            element={<ForgotPassword />}
+                        />
 
                         <Route element={<Layout />}>
                             <Route path="/" element={<Dashboard />} />

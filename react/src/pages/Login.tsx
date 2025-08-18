@@ -1,7 +1,74 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginFormUser, User } from "../types";
+import { useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { getUsers } from "../services";
+import { addLoggedUser } from "../redux/slice";
 
 function Login() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const [loginUserObj, setLoginUserObj] = useState<LoginFormUser>({
+        email: "",
+        password: "",
+    });
+
+    // Get users. !!! Check HTTP with Boris to get users from BE
+    // const {
+    //     data: users,
+    //     isLoading: usersIsLoading,
+    //     error: usersError,
+    // } = useQuery({
+    //     queryKey: ["users"],
+    //     queryFn: getUsers,
+    // });
+
+    // Login
+    function handleUserLogin(e: React.FormEvent) {
+        e.preventDefault();
+
+        // Comparing login credentials with registered users
+        const user = users.find(
+            (user: User) =>
+                user.email === loginUserObj.email &&
+                user.password === loginUserObj.password
+        );
+
+        if (!user) {
+            alert("Wrong credentials!");
+            return;
+        }
+
+        if (user.status === "banned") {
+            alert("You are banned!");
+            return;
+        }
+
+        if (user.status === "rejected") {
+            alert("You are rejected!");
+            return;
+        }
+
+        if (user.status === "pending") {
+            alert("Your registration is waiting for approval!");
+            return;
+        }
+
+        // Keeping user in Redux and in Local
+        if (user) {
+            alert("Credentials are matching!");
+            dispatch(addLoggedUser(user));
+            navigate("/");
+        }
+    }
+
+    // Error handling
+    // if (usersIsLoading) return <p>Loading...</p>;
+    // if (usersError) return <p>{usersError?.message}</p>;
+    // if (!users) return <p>No data found.</p>;
     return (
         <div className="auth-wrapper">
             <div className="form-wrapper">
@@ -10,18 +77,47 @@ function Login() {
 
                 <div className="input-wrapper">
                     <label>Email</label>
-                    <input type="email" />
+                    <input
+                        onChange={(e) =>
+                            setLoginUserObj({
+                                ...loginUserObj,
+                                email: e.target.value,
+                            })
+                        }
+                        value={loginUserObj.email}
+                        type="email"
+                    />
                 </div>
                 <div className="input-wrapper">
                     <label>Password</label>
-                    <input type="password" />
+                    <input
+                        onChange={(e) =>
+                            setLoginUserObj({
+                                ...loginUserObj,
+                                password: e.target.value,
+                            })
+                        }
+                        value={loginUserObj.password}
+                        type="password"
+                    />
                 </div>
 
                 <div className="button-wrapper">
-                    <button className="btn btn--primary" type="submit">
+                    <button
+                        onClick={handleUserLogin}
+                        className="btn btn-primary"
+                        type="submit"
+                    >
                         <span>Login</span>
                     </button>
                 </div>
+
+                <p className="login-text">
+                    Forgot password? Click{" "}
+                    <span onClick={() => navigate("/forgot-password")}>
+                        here!
+                    </span>{" "}
+                </p>
 
                 <p className="login-text">
                     Don't have an account? Register{" "}
