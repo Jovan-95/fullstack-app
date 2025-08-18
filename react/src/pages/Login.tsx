@@ -95,42 +95,44 @@ function Login() {
                 <div className="auth-logo">LMS</div>
                 <div className="auth-heading">Login</div>
 
-                <div className="input-wrapper">
-                    <label>Email</label>
-                    <input
-                        onChange={(e) =>
-                            setLoginUserObj({
-                                ...loginUserObj,
-                                email: e.target.value,
-                            })
-                        }
-                        value={loginUserObj.email}
-                        type="email"
-                    />
-                </div>
-                <div className="input-wrapper">
-                    <label>Password</label>
-                    <input
-                        onChange={(e) =>
-                            setLoginUserObj({
-                                ...loginUserObj,
-                                password: e.target.value,
-                            })
-                        }
-                        value={loginUserObj.password}
-                        type="password"
-                    />
-                </div>
+                <form>
+                    <div className="input-wrapper">
+                        <label>Email</label>
+                        <input
+                            onChange={(e) =>
+                                setLoginUserObj({
+                                    ...loginUserObj,
+                                    email: e.target.value,
+                                })
+                            }
+                            value={loginUserObj.email}
+                            type="email"
+                        />
+                    </div>
+                    <div className="input-wrapper">
+                        <label>Password</label>
+                        <input
+                            onChange={(e) =>
+                                setLoginUserObj({
+                                    ...loginUserObj,
+                                    password: e.target.value,
+                                })
+                            }
+                            value={loginUserObj.password}
+                            type="password"
+                        />
+                    </div>
 
-                <div className="button-wrapper">
-                    <button
-                        onClick={handleUserLogin}
-                        className="btn btn-primary"
-                        type="submit"
-                    >
-                        <span>Login</span>
-                    </button>
-                </div>
+                    <div className="button-wrapper">
+                        <button
+                            onClick={handleUserLogin}
+                            className="btn btn-primary"
+                            type="submit"
+                        >
+                            <span>Login</span>
+                        </button>
+                    </div>
+                </form>
 
                 <p className="login-text">
                     Forgot password? Click{" "}
