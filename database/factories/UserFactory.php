@@ -13,8 +13,8 @@ class UserFactory extends Factory
 
     public function definition(): array
     {
-        $maleImage   = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/man.png?token=...";
-        $femaleImage = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/woman.png?token=...";
+        $maleImage   = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/man.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWM3M2U5OC0zOGE5LTRlODItYWMyZS1iYmZiZDQzNjExYjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhdmF0YXJzL21hbi5wbmciLCJpYXQiOjE3NTU1MjA2NDIsImV4cCI6MTc4NzA1NjY0Mn0.wf-C0F4t0218bmjsev5D85po75eh7YB2jQ5xlmWhKS4";
+        $femaleImage = "https://mizgqxjgunjoxzgmssso.supabase.co/storage/v1/object/sign/avatars/woman.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWM3M2U5OC0zOGE5LTRlODItYWMyZS1iYmZiZDQzNjExYjUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhdmF0YXJzL3dvbWFuLnBuZyIsImlhdCI6MTc1NTUyMzUyNiwiZXhwIjoxNzg3MDU5NTI2fQ.T2CDmfDKYTxx3iGMa8leYfLR9QEExGLBpNtV7U-_8FA";
 
         $genderId = fake()->numberBetween(1, 2);
 
@@ -31,7 +31,7 @@ class UserFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (User $user) {
-            // Uveri se da role postoje (guard 'web' po difoltu)
+           
             Role::findOrCreate('student', 'web');
             Role::findOrCreate('teacher', 'web');
 
@@ -40,7 +40,7 @@ class UserFactory extends Factory
         });
     }
 
-    // Stati za eksplicitnu dodelu role
+    
     public function student(): static
     {
         return $this->afterCreating(function (User $user) {
