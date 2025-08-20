@@ -8,6 +8,13 @@ import { registerNewUser } from "../services/userServices";
 function Register() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const [nameError, showNameError] = useState(false);
+    const [usernameError, showUsernameError] = useState(false);
+
+    const [emailError, showEmailError] = useState(false);
+    const [passError, showPassError] = useState(false);
+    const [shortPassError, showShortPassError] = useState(false);
+    const [emtpyFieldsError, showEmtpyFieldsError] = useState(false);
 
     const [userObj, setUserObj] = useState<RegisterFormUser>({
         name: "",
@@ -46,18 +53,27 @@ function Register() {
             userObj.password === "" ||
             userObj.password_confirmation === ""
         )
-            return alert("Fill all fields!");
+            return showEmtpyFieldsError(true);
+
+        if (userObj.name.length < 3) {
+            return showNameError(true);
+        }
+
+        if (userObj.username.length < 3) {
+            return showUsernameError(true);
+        }
 
         if (userObj.password.length < 8) {
-            return alert("Password is too short!");
+            return showShortPassError(true);
         }
 
         if (userObj.password !== userObj.password_confirmation) {
-            return alert("Passwords are not matching!");
+            return showPassError(true);
         }
 
         if (!validateEmail(userObj.email)) {
-            return alert("Invalid Email!");
+            // return alert("Invalid Email!");
+            return showEmailError(true);
         }
 
         // User for sending
@@ -113,9 +129,9 @@ function Register() {
                         <path
                             d="M69.5 58.25C72.5357 46.243 84.0012 40.1122 108.964 40C109.363 39.9985 109.759 40.0762 110.128 40.2285C110.497 40.3808 110.832 40.6048 111.114 40.8875C111.396 41.1703 111.62 41.5062 111.772 41.8759C111.924 42.2456 112.001 42.6418 112 43.0417V97.7917C112 98.5984 111.68 99.372 111.111 99.9425C110.542 100.513 109.769 100.833 108.964 100.833C84.6786 100.833 75.2963 105.74 69.5 113M69.5 58.25C66.4643 46.243 54.9988 40.1122 30.0357 40C29.6367 39.9985 29.2412 40.0762 28.8722 40.2285C28.5032 40.3808 28.168 40.6048 27.8858 40.8875C27.6036 41.1703 27.3801 41.5062 27.228 41.8759C27.076 42.2456 26.9985 42.6418 27 43.0417V97.4248C27 99.303 28.1612 100.833 30.0357 100.833C54.3214 100.833 63.7378 105.776 69.5 113M69.5 58.25V113"
                             stroke="white"
-                            stroke-width="5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
                     </svg>
                 </div>
@@ -129,6 +145,13 @@ function Register() {
                         value={userObj.name}
                         type="text"
                     />
+                    {usernameError ? (
+                        <p className="error-msg">
+                            Name or username is too short!
+                        </p>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="input-wrapper">
                     <label>Username</label>
@@ -139,6 +162,13 @@ function Register() {
                         value={userObj.username}
                         type="text"
                     />
+                    {nameError ? (
+                        <p className="error-msg">
+                            Name or username is too short!
+                        </p>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="input-wrapper">
                     <label>Email</label>
@@ -149,6 +179,11 @@ function Register() {
                         value={userObj.email}
                         type="email"
                     />
+                    {emailError ? (
+                        <p className="error-msg">Mail is not correct!</p>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="input-wrapper">
                     <label>Password</label>
@@ -159,6 +194,11 @@ function Register() {
                         value={userObj.password}
                         type="password"
                     />
+                    {shortPassError ? (
+                        <p className="error-msg">Password too short!</p>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="input-wrapper">
                     <label>Confirm Password</label>
@@ -173,6 +213,11 @@ function Register() {
                         type="password"
                     />
                 </div>
+                {passError ? (
+                    <p className="error-msg">Password are not matching</p>
+                ) : (
+                    ""
+                )}
                 <div className="input-wrapper">
                     <label>Gender</label>
                     <div className="radio-buttons">
@@ -208,6 +253,11 @@ function Register() {
                             Female
                         </label>
                     </div>
+                    {emtpyFieldsError ? (
+                        <p className="error-msg">Fill all fields!</p>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="button-wrapper">
                     <button

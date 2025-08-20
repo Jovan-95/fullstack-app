@@ -1,44 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "../../services/userServices";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { getUsers } from "../../services/userServices";
 import Pagination from "../../components/Pagination";
-import { useEffect, useState } from "react";
 
 function Users() {
-    const [allUsers, setAllUsers] = useState([]);
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
 
-    // Get users.
     const {
-        data: users,
-        isLoading: usersIsLoading,
-        error: usersError,
+        data: usersData,
+        isLoading,
+        error,
     } = useQuery({
-        queryKey: ["users"],
-        queryFn: getUsers,
+        queryKey: ["users", page],
+        queryFn: () => getUsers(page),
     });
 
-    useEffect(() => {
-        setAllUsers(users.data);
-        setTotalPages(Math.ceil(users.total / users.per_page));
-    }, [page]);
-
-    // Error handling
-    if (usersIsLoading) return <p>Loading...</p>;
-    if (usersError) return <p>{usersError?.message}</p>;
-    if (!users) return <p>No data found.</p>;
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>{(error as Error).message}</p>;
+    if (!usersData || usersData.data.length === 0)
+        return <p>No users found.</p>;
 
     return (
         <div className="users-page">
             <h1 className="users-title">Users</h1>
 
             <div className="users-grid">
-                {/* Add TS types for single users */}
-                {users.data.map((user) => (
+                {usersData.data.map((user: any) => (
                     <NavLink key={user.id} to={`/admin/users/${user.id}`}>
                         <div className="user-card">
-                            <img src={user.profile_image} alt="User Avatar" />
+                            <img
+                                src={
+                                    user.profile_image ||
+                                    "https://via.placeholder.com/100"
+                                }
+                                alt="User Avatar"
+                            />
                             <h2>{user.name}</h2>
                             <p>Email: {user.email}</p>
                             <button className="view-btn">View Profile</button>
@@ -46,10 +43,11 @@ function Users() {
                     </NavLink>
                 ))}
             </div>
+
             <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={(page) => setPage(page)}
+                currentPage={usersData.current_page}
+                lastPage={usersData.last_page}
+                onPageChange={(p) => setPage(p)}
             />
         </div>
     );

@@ -2,17 +2,14 @@ import { LoginFormUser, User } from "../types";
 
 const API_URL = "http://localhost:8000/api";
 
-// Get HTTP method
-export async function getUsers() {
+// Get Users with pagination HTTP method
+export async function getUsers(page: number = 1) {
     try {
-        // find user from local storage
         const storedUser = localStorage.getItem("loggedInUser");
-        // find token from user object
         const token = storedUser ? JSON.parse(storedUser).auth_token : null;
-        // console.log("Token", token);
         if (!token) throw new Error("No token found");
 
-        const res = await fetch(`${API_URL}/users`, {
+        const res = await fetch(`${API_URL}/users?page=${page}`, {
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
@@ -24,14 +21,14 @@ export async function getUsers() {
 
         const data = await res.json();
         console.log(data);
-        return data;
+        return data; // Laravel pagination response
     } catch (err) {
         console.error(err);
-        return [];
+        return { data: [], current_page: 1, last_page: 1 };
     }
 }
 
-// Post HTTP method. Ask Boris for route!!!
+// Post HTTP method
 export async function registerNewUser(user: User) {
     try {
         const res = await fetch(`${API_URL}/register`, {

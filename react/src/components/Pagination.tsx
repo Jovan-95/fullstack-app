@@ -1,5 +1,15 @@
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+type PaginationProps = {
+    currentPage: number;
+    lastPage: number;
+    onPageChange: (page: number) => void;
+};
+
+const Pagination = ({
+    currentPage,
+    lastPage,
+    onPageChange,
+}: PaginationProps) => {
+    const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
 
     return (
         <div className="pagination">
@@ -21,7 +31,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             ))}
 
             <button
-                disabled={currentPage === totalPages}
+                disabled={currentPage === lastPage}
                 onClick={() => onPageChange(currentPage + 1)}
             >
                 Next
