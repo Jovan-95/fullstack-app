@@ -14,4 +14,5 @@ Route::post('reset-password', [\App\Http\Controllers\AuthController::class, 'res
 Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
 
 ///////////////////////////////////////////USERS ROUTES
+
 Route::get('users', [\App\Http\Controllers\UserController::class, 'getUsers'])->middleware('auth:sanctum');
