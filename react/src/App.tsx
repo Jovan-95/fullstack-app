@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import "./index.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import SingleUser from "./pages/single-pages/SingleUser";
 
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
@@ -39,6 +40,10 @@ function App() {
                                 element={<CourseManagement />}
                             />
                             <Route path="/admin/users" element={<Users />} />
+                            <Route
+                                path="/admin/users/:id"
+                                element={<SingleUser />}
+                            />
                         </Route>
                     </Routes>
                 </Suspense>

@@ -8,12 +8,13 @@
     .form-wrapper {
         width: 560px;
         background-color: white;
-        padding: 100px;
+        padding: 50px;
         .auth-logo {
             font-size: 32px;
             font-weight: bold;
             line-height: 40px;
             color: #344054;
+            display: flex;
             text-align: center;
         }
         .auth-heading {
