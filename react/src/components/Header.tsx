@@ -77,12 +77,16 @@ function Header() {
                         <div>
                             <img alt="" />
                         </div>
-                        <div className="img-wrapper">
+                        <div
+                            onClick={() => navigate("/profile")}
+                            className="img-wrapper"
+                        >
                             <img
                                 src={loggedUser?.profile_image}
                                 onClick={() => navigate("/profile")}
                                 alt=""
                             />
+                            <p>{loggedUser.username}</p>
                         </div>
                     </div>
                 ) : (

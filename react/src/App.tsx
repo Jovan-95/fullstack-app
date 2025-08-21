@@ -4,6 +4,8 @@ import "./index.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import SingleUser from "./pages/single-pages/SingleUser";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
@@ -23,8 +25,22 @@ function App() {
             <BrowserRouter>
                 <Suspense fallback={<h2>Loading...</h2>}>
                     <Routes>
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/register"
+                            element={
+                                <PublicRoute>
+                                    <Register />
+                                </PublicRoute>
+                            }
+                        />
+                        <Route
+                            path="/login"
+                            element={
+                                <PublicRoute>
+                                    <Login />
+                                </PublicRoute>
+                            }
+                        />
                         <Route
                             path="/forgot-password"
                             element={<ForgotPassword />}
@@ -32,17 +48,53 @@ function App() {
 
                         <Route element={<Layout />}>
                             <Route path="/" element={<Dashboard />} />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route path="/quiz" element={<Quiz />} />
-                            <Route path="/courses" element={<Courses />} />
+                            <Route
+                                path="/profile"
+                                element={
+                                    <PrivateRoute>
+                                        <Profile />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/quiz"
+                                element={
+                                    <PrivateRoute>
+                                        <Quiz />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/courses"
+                                element={
+                                    <PrivateRoute>
+                                        <Courses />
+                                    </PrivateRoute>
+                                }
+                            />
                             <Route
                                 path="/admin/course-management"
-                                element={<CourseManagement />}
+                                element={
+                                    <PrivateRoute>
+                                        <CourseManagement />
+                                    </PrivateRoute>
+                                }
                             />
-                            <Route path="/admin/users" element={<Users />} />
+                            <Route
+                                path="/admin/users"
+                                element={
+                                    <PrivateRoute>
+                                        <Users />
+                                    </PrivateRoute>
+                                }
+                            />
                             <Route
                                 path="/admin/users/:id"
-                                element={<SingleUser />}
+                                element={
+                                    <PrivateRoute>
+                                        <SingleUser />
+                                    </PrivateRoute>
+                                }
                             />
                         </Route>
                     </Routes>

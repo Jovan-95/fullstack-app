@@ -1,6 +1,40 @@
-import { NavLink } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
+import { RootState } from "../redux/store";
+import { removeUser } from "../redux/slice";
+import { useMutation } from "@tanstack/react-query";
+import { logoutUser } from "../services/userServices";
 
 function Sidebar() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const loggedUser = useSelector(
+        (state: RootState) => state.auth.loggedInUser
+    );
+
+    // HTTP POST
+    const logoutUserMutation = useMutation({
+        mutationFn: logoutUser,
+        onSuccess: (data) => {
+            // Čišćenje localStorage
+            localStorage.removeItem("loggedInUser");
+            localStorage.removeItem("auth_token");
+
+            // Redux
+            dispatch(removeUser());
+
+            // Navigation
+            navigate("/login");
+        },
+        onError: (err) => {
+            alert("Logout failed!");
+        },
+    });
+
+    function handleLogout() {
+        logoutUserMutation.mutate();
+    }
     return (
         <>
             <div className="sidebar">
@@ -41,47 +75,68 @@ function Sidebar() {
                         </div>
                     </NavLink>
 
-                    <>
-                        <NavLink to={"/courses"}>
-                            <div className="sidebar-item">
-                                <span>Courses</span>
-                            </div>
-                        </NavLink>
-                        <NavLink to={"/profile"}>
-                            <div className="sidebar-item">
-                                <span>Profile</span>
-                            </div>
-                        </NavLink>
-                        <NavLink to={"/quiz"}>
-                            <div className="sidebar-item">
-                                <span>Quiz</span>
-                            </div>
-                        </NavLink>
-                        <NavLink to={"/admin/users"}>
-                            <div className="sidebar-item">
-                                <span>Users</span>
-                            </div>
-                        </NavLink>
+                    {loggedUser ? (
+                        <>
+                            <NavLink to={"/courses"}>
+                                <div className="sidebar-item">
+                                    <span>Courses</span>
+                                </div>
+                            </NavLink>
+                            <NavLink to={"/profile"}>
+                                <div className="sidebar-item">
+                                    <span>Profile</span>
+                                </div>
+                            </NavLink>
+                            <NavLink to={"/quiz"}>
+                                <div className="sidebar-item">
+                                    <span>Quiz</span>
+                                </div>
+                            </NavLink>
+                            <NavLink to={"/admin/users"}>
+                                <div className="sidebar-item">
+                                    <span>Users</span>
+                                </div>
+                            </NavLink>
 
-                        <NavLink to={"/admin/course-management"}>
-                            <div className="sidebar-item">
-                                <span>Management</span>
-                            </div>
-                        </NavLink>
-                    </>
+                            <NavLink to={"/admin/course-management"}>
+                                <div className="sidebar-item">
+                                    <span>Management</span>
+                                </div>
+                            </NavLink>
+                        </>
+                    ) : (
+                        <div
+                            onClick={() => navigate("/login")}
+                            className="sidebar-item"
+                        >
+                            {" "}
+                            <strong> Login to see all pages</strong>
+                        </div>
+                    )}
                 </div>
                 <div className="sidebar-bottom-wrapper">
-                    <>
-                        <div className="profile-info-wrapper">
-                            <div className="sidebar-item">test@gmail.com</div>
-                            <div className="sidebar-item">role</div>
-                        </div>
-                    </>
-                    <div className="logout">
-                        <div>
-                            <button className="btn btn-primary">Login</button>
-                        </div>
-                    </div>
+                    {loggedUser ? (
+                        <>
+                            <div className="profile-info-wrapper">
+                                <div className="sidebar-item">
+                                    {loggedUser.email}
+                                </div>
+                                <div className="sidebar-item"></div>
+                            </div>
+                            <div className="logout">
+                                <div>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="btn btn-primary"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        ""
+                    )}
                 </div>
             </div>
         </>
