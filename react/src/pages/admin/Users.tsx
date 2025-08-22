@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getUsers } from "../../services/userServices";
 import Pagination from "../../components/Pagination";
+import { ListedUser } from "../../types";
 
 function Users() {
     const [page, setPage] = useState(1);
@@ -26,7 +27,7 @@ function Users() {
             <h1 className="users-title">Users</h1>
 
             <div className="users-grid">
-                {usersData.data.map((user: any) => (
+                {usersData.data.map((user: ListedUser) => (
                     <NavLink key={user.id} to={`/admin/users/${user.id}`}>
                         <div className="user-card">
                             <img

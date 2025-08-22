@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUsers, loginUser } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
 import { RootState } from "../redux/store";
+import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function Login() {
     const navigate = useNavigate();
@@ -46,17 +47,18 @@ function Login() {
                 // Dispatch u Redux
                 dispatch(
                     addLoggedUser({
-                        ...data.data, // id, name, email, roles
+                        ...data.data,
                         auth_token: data.auth_token, // auth_token iz response
                     })
                 );
 
                 // Navigacija na home
+                showSuccessToast("Login is successfull!");
                 navigate("/");
             }
         },
         onError: (err) => {
-            alert("Login failed!");
+            showErrorToast("Login failed!");
         },
     });
 

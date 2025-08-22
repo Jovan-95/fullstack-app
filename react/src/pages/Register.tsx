@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useNavigate } from "react-router-dom";
-import { RegisterFormUser, User } from "../types";
+import { User } from "../types";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { registerNewUser } from "../services/userServices";
+import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function Register() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [nameError, showNameError] = useState(false);
     const [usernameError, showUsernameError] = useState(false);
-
     const [emailError, showEmailError] = useState(false);
     const [passError, showPassError] = useState(false);
     const [shortPassError, showShortPassError] = useState(false);
     const [emtpyFieldsError, showEmtpyFieldsError] = useState(false);
 
-    const [userObj, setUserObj] = useState<RegisterFormUser>({
+    const [userObj, setUserObj] = useState<User>({
         name: "",
         username: "",
         email: "",
@@ -32,7 +32,7 @@ function Register() {
             queryClient.invalidateQueries({ queryKey: ["register"] });
         },
         onError: (err) => {
-            alert("Registration failed!");
+            showErrorToast("Registration failed!");
         },
     });
 
@@ -90,7 +90,7 @@ function Register() {
 
         addUserMutation.mutate(newUser);
         navigate("/login");
-        alert("Your acc is waiting for approval");
+        showSuccessToast("Your registration is successfull!");
 
         // reset fields
         setUserObj({
