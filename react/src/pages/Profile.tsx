@@ -1,19 +1,71 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Modal from "../components/Modal";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editUser } from "../services/userServices";
+import { User } from "../types";
+import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function Profile() {
+    const queryClient = useQueryClient();
     const [modal, setModal] = useState<boolean>(false);
+
+    // Edit user fields
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
-    console.log(loggedUser);
+    console.log("Logged user:", loggedUser);
+
+    // Patch HTTP method Edit user
+    const { mutate: editUserFormFields } = useMutation({
+        mutationFn: ({
+            userId,
+            editedObj,
+        }: {
+            userId: string;
+            editedObj: Partial<User>; // Use Partial<User> for type safety
+        }) => editUser(userId, editedObj),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["users"]);
+        },
+        onError: (error: any) => {
+            showErrorToast(error?.message || "Failed to update user");
+        },
+    });
 
     // Edit modal
     function editModal() {
         setModal(true);
+        setUsername(loggedUser?.username);
+    }
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+
+        // Add error messages later
+        if (password !== confirmPassword) {
+            return showErrorToast("Passwords do not match");
+        }
+
+        if (!username || !email || !password) {
+            return showErrorToast("All fields are required");
+        }
+
+        // Edited Obj for sending
+        const editedObj = {
+            username,
+            password,
+        };
+
+        editUserFormFields({ userId: String(loggedUser?.id), editedObj });
+        showSuccessToast("Changes are saved!");
+        setModal(false);
     }
     return (
         <div className="profile-page">
@@ -53,21 +105,6 @@ function Profile() {
                             </button>
                         </div>
                     </div>
-
-                    {/* <ul className="stats">
-                        <li>
-                            <span className="label">Courses</span>
-                            <span className="value">12</span>
-                        </li>
-                        <li>
-                            <span className="label">Students</span>
-                            <span className="value">358</span>
-                        </li>
-                        <li>
-                            <span className="label">Rating</span>
-                            <span className="value">4.8</span>
-                        </li>
-                    </ul> */}
                 </div>
 
                 <div className="tabs">
@@ -107,28 +144,9 @@ function Profile() {
                             </li>
                         </ul>
                     </div>
-
-                    {/* <div className="card skills-card">
-                        <h3>Skills</h3>
-                        <div className="chips">
-                            <span className="chip">React</span>
-                            <span className="chip">Laravel</span>
-                            <span className="chip">Tailwind</span>
-                            <span className="chip">Docker</span>
-                        </div>
-                    </div> */}
                 </aside>
 
                 <main className="right-column">
-                    {/* <div className="card about-card">
-                        <h3>About</h3>
-                        <p>
-                            Instructor with focus on modern JS and PHP
-                            ecosystems. Passionate about developer experience,
-                            clean architecture and teaching.
-                        </p>
-                    </div> */}
-
                     <div className="card timeline-card">
                         <h3>Recent Activity</h3>
                         <ul className="timeline">
@@ -189,6 +207,8 @@ function Profile() {
                     </div>
                 </main>
             </div>
+
+            {/* Edit modal */}
             <div className={modal ? "d-block" : "d-none"}>
                 <Modal>
                     <div
@@ -210,6 +230,8 @@ function Profile() {
                                 id="username"
                                 className="form-input"
                                 placeholder="Enter username"
+                                onChange={(e) => setUsername(e.target.value)}
+                                value={username}
                             />
                         </div>
                         <div className="form-group">
@@ -229,6 +251,8 @@ function Profile() {
                                 id="password"
                                 className="form-input"
                                 placeholder="Enter password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
                             />
                         </div>
                         <div className="form-group">
@@ -240,9 +264,17 @@ function Profile() {
                                 id="confirmPassword"
                                 className="form-input"
                                 placeholder="Repeat password"
+                                onChange={(e) =>
+                                    setConfirmPassword(e.target.value)
+                                }
+                                value={confirmPassword}
                             />
                         </div>
-                        <button type="submit" className="btn btn--primary">
+                        <button
+                            onClick={(e) => handleSubmit(e)}
+                            type="submit"
+                            className="btn btn--primary"
+                        >
                             <span>Save</span>
                         </button>
                     </form>

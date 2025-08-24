@@ -96,3 +96,25 @@ export async function logoutUser() {
         console.error(err);
     }
 }
+
+//// Patch HTTP method Edit user
+export async function editUser(userId: string, editedObj: Partial<User>) {
+    try {
+        const res = await fetch(`${API_URL}/users/${userId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editedObj),
+        });
+        if (!res.ok) {
+            throw new Error(`${res.status}, ${res.statusText}`);
+        }
+        const data = await res.json();
+        console.log("PATCH response EDIT user:", data); // ✅ keep this console log
+        return data;
+    } catch (err) {
+        console.error("PATCH error:", err);
+        throw err;
+    }
+}
