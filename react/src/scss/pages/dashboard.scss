@@ -1,0 +1,105 @@
+.dashboard {
+    padding: 2rem;
+    background: #f8f9fa;
+    font-family: Arial, sans-serif;
+
+    &__header {
+        margin-bottom: 2rem;
+        text-align: center;
+
+        .dashboard__title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard__subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+    }
+
+    &__stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        .stat-card {
+            flex: 1;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+
+            &__number {
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: #333;
+            }
+
+            &__label {
+                font-size: 0.9rem;
+                color: #777;
+            }
+        }
+    }
+
+    &__charts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        .chart-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+            &__title {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            &__placeholder {
+                background: #eef2f5;
+                height: 200px;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #888;
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    &__activities {
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+        .dashboard__section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .activities-list {
+            list-style: none;
+            padding: 0;
+
+            &__item {
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #eee;
+                font-size: 0.95rem;
+                color: #555;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
