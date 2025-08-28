@@ -16,3 +16,6 @@ Route::post('register', [\App\Http\Controllers\AuthController::class, 'register'
 ///////////////////////////////////////////USERS ROUTES
 
 Route::get('users', [\App\Http\Controllers\UserController::class, 'getUsers'])->middleware('auth:sanctum');
+
+
+Route::patch('user/settings', [\App\Http\Controllers\UserController::class, 'updateProfile'])->middleware('auth:sanctum');
