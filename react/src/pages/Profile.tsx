@@ -13,14 +13,19 @@ function Profile() {
     const [modal, setModal] = useState<boolean>(false);
 
     // Edit user fields
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [editedUserObj, setEditedUserObj] = useState({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        gender_id: 0,
+    });
 
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
-    console.log("Logged user:", loggedUser);
+    // console.log("Logged user:", loggedUser);
 
     // Patch HTTP method Edit user
     const { mutate: editUserFormFields } = useMutation({
@@ -42,28 +47,41 @@ function Profile() {
     // Edit modal
     function editModal() {
         setModal(true);
-        setUsername(loggedUser?.username);
+
+        setEditedUserObj({
+            name: loggedUser?.name,
+            username: loggedUser?.username,
+            password: "",
+            password_confirmation: "",
+            gender_id: loggedUser?.gender_id,
+        });
     }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         // Add error messages later
-        if (password !== confirmPassword) {
+        if (editedUserObj.password !== editedUserObj.password_confirmation) {
             return showErrorToast("Passwords do not match");
         }
 
-        if (!username || !email || !password) {
+        if (
+            !editedUserObj.username ||
+            !editedUserObj.name ||
+            !editedUserObj.password
+        ) {
             return showErrorToast("All fields are required");
         }
 
         // Edited Obj for sending
-        const editedObj = {
-            username,
-            password,
-        };
+        console.log("Edited user obj:", editedUserObj);
 
-        editUserFormFields({ userId: String(loggedUser?.id), editedObj });
+        // Patch request sending Edited user obj
+        editUserFormFields({
+            userId: String(loggedUser?.id),
+            editedObj: editedUserObj,
+        });
+
         showSuccessToast("Changes are saved!");
         setModal(false);
     }
@@ -224,14 +242,35 @@ function Profile() {
                     </div>
                     <form className="auth-form">
                         <div className="form-group">
+                            <label className="form-label">Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                className="form-input"
+                                placeholder="Enter name"
+                                onChange={(e) =>
+                                    setEditedUserObj({
+                                        ...editedUserObj,
+                                        name: e.target.value,
+                                    })
+                                }
+                                value={editedUserObj.name}
+                            />
+                        </div>
+                        <div className="form-group">
                             <label className="form-label">Username</label>
                             <input
                                 type="text"
                                 id="username"
                                 className="form-input"
                                 placeholder="Enter username"
-                                onChange={(e) => setUsername(e.target.value)}
-                                value={username}
+                                onChange={(e) =>
+                                    setEditedUserObj({
+                                        ...editedUserObj,
+                                        username: e.target.value,
+                                    })
+                                }
+                                value={editedUserObj.username}
                             />
                         </div>
                         <div className="form-group">
@@ -244,6 +283,55 @@ function Profile() {
                                 placeholder="Enter email"
                             />
                         </div>
+                        <div
+                            style={{ color: "black" }}
+                            className="input-wrapper"
+                        >
+                            <label>Gender</label>
+                            <div
+                                style={{
+                                    color: "black",
+                                }}
+                                className="radio-buttons"
+                            >
+                                <label
+                                    style={{
+                                        marginInline: "16px",
+                                    }}
+                                    className="radio-label"
+                                >
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        onChange={(e) =>
+                                            setEditedUserObj({
+                                                ...editedUserObj,
+                                                gender_id: 1,
+                                            })
+                                        }
+                                        value="male"
+                                    />
+                                    <span className="custom-radio"></span>
+                                    Male
+                                </label>
+
+                                <label className="radio-label">
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        onChange={(e) =>
+                                            setEditedUserObj({
+                                                ...editedUserObj,
+                                                gender_id: 2,
+                                            })
+                                        }
+                                        value="female"
+                                    />
+                                    <span className="custom-radio"></span>
+                                    Female
+                                </label>
+                            </div>
+                        </div>
                         <div className="form-group">
                             <label className="form-label">Password</label>
                             <input
@@ -251,8 +339,13 @@ function Profile() {
                                 id="password"
                                 className="form-input"
                                 placeholder="Enter password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                value={password}
+                                onChange={(e) =>
+                                    setEditedUserObj({
+                                        ...editedUserObj,
+                                        password: e.target.value,
+                                    })
+                                }
+                                value={editedUserObj.password}
                             />
                         </div>
                         <div className="form-group">
@@ -265,9 +358,12 @@ function Profile() {
                                 className="form-input"
                                 placeholder="Repeat password"
                                 onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
+                                    setEditedUserObj({
+                                        ...editedUserObj,
+                                        password_confirmation: e.target.value,
+                                    })
                                 }
-                                value={confirmPassword}
+                                value={editedUserObj.password_confirmation}
                             />
                         </div>
                         <button
