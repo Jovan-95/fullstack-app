@@ -58,9 +58,7 @@ public function getUsers()
 public function updateAvatar(EditUserImageRequest $request)
 {
     $user = Auth::user();
-
-    
-    if (!$request->hasFile('profile_image')) {
+if (!$request->hasFile('profile_image')) {
         return response()->json([
             'success' => false,
             'message' => 'No file uploaded. Field must be "profile_image" and payload must be multipart/form-data.',
@@ -68,8 +66,7 @@ public function updateAvatar(EditUserImageRequest $request)
         ], 422);
     }
 
-   
-    if ($user->profile_image && !str_contains($user->profile_image, 'supabase.co')) {
+   if ($user->profile_image && !str_contains($user->profile_image, 'supabase.co')) {
         $pathFromUrl = parse_url($user->profile_image, PHP_URL_PATH); 
         if ($pathFromUrl) {
             $previousPath = ltrim(str_replace('/storage/', '', $pathFromUrl), '/'); 
@@ -78,18 +75,11 @@ public function updateAvatar(EditUserImageRequest $request)
             }
         }
     }
-
-    
-    $path = $request->file('profile_image')->store('profile_images', 'public');
-
-    
+$path = $request->file('profile_image')->store('profile_images', 'public');
     $publicUrl = asset(Storage::url($path));
-    
-
     $user->profile_image = $publicUrl;
     $user->save();
-
-    return response()->json([
+return response()->json([
         'success' => true,
         'message' => 'Profile picture updated successfully.',
         'data'    => [
