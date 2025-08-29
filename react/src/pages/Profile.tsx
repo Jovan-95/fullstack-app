@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Modal from "../components/Modal";
 import { useState } from "react";
@@ -7,16 +7,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editUser } from "../services/userServices";
 import { User } from "../types";
 import { showErrorToast, showSuccessToast } from "../components/Toast";
+import { updateLoggedInUser } from "../redux/slice";
 
 function Profile() {
     const queryClient = useQueryClient();
     const [modal, setModal] = useState<boolean>(false);
+    const dispatch = useDispatch();
 
     // Edit user fields
     const [editedUserObj, setEditedUserObj] = useState({
         name: "",
         username: "",
-        email: "",
         password: "",
         password_confirmation: "",
         gender_id: 0,
@@ -27,17 +28,27 @@ function Profile() {
     );
     // console.log("Logged user:", loggedUser);
 
-    // Patch HTTP method Edit user
+    //// Patch HTTP method Edit user
     const { mutate: editUserFormFields } = useMutation({
         mutationFn: ({
-            userId,
             editedObj,
         }: {
-            userId: string;
             editedObj: Partial<User>; // Use Partial<User> for type safety
-        }) => editUser(userId, editedObj),
-        onSuccess: () => {
-            queryClient.invalidateQueries(["users"]);
+        }) => editUser(editedObj),
+        onSuccess: (data) => {
+            // Azuriranje usera i u Reduxu da bi videli najnovije promene
+            dispatch(updateLoggedInUser(data.data));
+
+            // Osveži localStorage
+            const storedUser = JSON.parse(
+                localStorage.getItem("loggedInUser") || "{}"
+            );
+            localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({ ...storedUser, ...data.data })
+            );
+
+            queryClient.invalidateQueries(["settings"]);
         },
         onError: (error: any) => {
             showErrorToast(error?.message || "Failed to update user");
@@ -78,7 +89,6 @@ function Profile() {
 
         // Patch request sending Edited user obj
         editUserFormFields({
-            userId: String(loggedUser?.id),
             editedObj: editedUserObj,
         });
 
