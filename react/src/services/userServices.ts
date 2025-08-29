@@ -98,12 +98,19 @@ export async function logoutUser() {
 }
 
 //// Patch HTTP method Edit user
-export async function editUser(userId: string, editedObj: Partial<User>) {
+export async function editUser(editedObj: Partial<User>) {
     try {
-        const res = await fetch(`${API_URL}/users/${userId}`, {
+        // Find token
+        const storedUser = localStorage.getItem("loggedInUser");
+        const token = storedUser ? JSON.parse(storedUser).auth_token : null;
+
+        if (!token) throw new Error("No token found");
+
+        const res = await fetch(`${API_URL}/user/settings`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(editedObj),
         });
@@ -111,7 +118,7 @@ export async function editUser(userId: string, editedObj: Partial<User>) {
             throw new Error(`${res.status}, ${res.statusText}`);
         }
         const data = await res.json();
-        console.log("PATCH response EDIT user:", data); // ✅ keep this console log
+        console.log("PATCH response EDIT user:", data);
         return data;
     } catch (err) {
         console.error("PATCH error:", err);
