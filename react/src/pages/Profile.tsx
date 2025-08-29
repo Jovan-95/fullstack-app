@@ -4,7 +4,7 @@ import { RootState } from "../redux/store";
 import Modal from "../components/Modal";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editUser } from "../services/userServices";
+import { editUser, uploadAvatar } from "../services/userServices";
 import { User } from "../types";
 import { showErrorToast, showSuccessToast } from "../components/Toast";
 import { updateLoggedInUser } from "../redux/slice";
@@ -13,6 +13,7 @@ function Profile() {
     const queryClient = useQueryClient();
     const [modal, setModal] = useState<boolean>(false);
     const dispatch = useDispatch();
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     // Edit user fields
     const [editedUserObj, setEditedUserObj] = useState({
@@ -54,6 +55,38 @@ function Profile() {
             showErrorToast(error?.message || "Failed to update user");
         },
     });
+
+    // File change
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
+    }
+
+    // 2. Slanje fajla na BE i osvežavanje Redux + localStorage
+    async function handleUpload() {
+        if (!selectedFile) return showErrorToast("No file selected");
+
+        try {
+            const data = await uploadAvatar(selectedFile);
+
+            // Update Redux
+            dispatch(updateLoggedInUser(data.data));
+
+            // Update localStorage
+            const storedUser = JSON.parse(
+                localStorage.getItem("loggedInUser") || "{}"
+            );
+            localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({ ...storedUser, ...data.data })
+            );
+
+            showSuccessToast("Avatar successfully updated!");
+        } catch (err: any) {
+            showErrorToast(err?.message || "Failed to upload avatar");
+        }
+    }
 
     // Edit modal
     function editModal() {
@@ -104,12 +137,23 @@ function Profile() {
                     <div className="avatar-wrap">
                         <img
                             className="avatar"
-                            src={loggedUser?.profile_image}
+                            src={`${loggedUser?.profile_image}`}
                             alt="User avatar"
                         />
-                        <button className="btn btn-primary btn-sm change-photo">
-                            Change
-                        </button>
+
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                            <button
+                                onClick={handleUpload}
+                                className="btn btn-primary btn-sm change-photo"
+                            >
+                                Upload
+                            </button>
+                        </div>
                     </div>
 
                     <div className="identity">

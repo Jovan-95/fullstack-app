@@ -125,3 +125,34 @@ export async function editUser(editedObj: Partial<User>) {
         throw err;
     }
 }
+
+// Upload / Change Avatar HTTP request
+export async function uploadAvatar(file: File) {
+    try {
+        const storedUser = localStorage.getItem("loggedInUser");
+        const token = storedUser ? JSON.parse(storedUser).auth_token : null;
+        if (!token) throw new Error("No token found");
+
+        const formData = new FormData();
+        formData.append("profile_image", file);
+        formData.append("_method", "PATCH");
+
+        const res = await fetch(`${API_URL}/user/avatar`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application / json",
+            },
+            body: formData,
+        });
+
+        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+
+        const data = await res.json();
+        console.log("Avatar upload response:", data);
+        return data;
+    } catch (err) {
+        console.error("Avatar upload error:", err);
+        throw err;
+    }
+}
