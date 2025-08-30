@@ -156,3 +156,23 @@ export async function uploadAvatar(file: File) {
         throw err;
     }
 }
+
+// Search users. !!!! Ask Boris for route
+export async function searchUsers(query: string) {
+    try {
+        const res = await fetch(`${API_URL}/users/search`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({ query }),
+        });
+        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+}

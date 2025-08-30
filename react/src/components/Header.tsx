@@ -51,12 +51,12 @@ function Header() {
         <div className="header-wrapper">
             <div className="header">
                 <div className="search-wrapper">
-                    <img alt="" />
+                    {/* <img alt="" />
                     <input
                         className="header-search"
                         placeholder="Search..."
                         type="search"
-                    />
+                    /> */}
                 </div>
                 <div className="time-wrapper">
                     <div className="time">{formattedDate}</div>
