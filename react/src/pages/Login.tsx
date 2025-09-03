@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginFormUser } from "../types";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUsers, loginUser } from "../services/userServices";
+import { loginUser } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
 import { RootState } from "../redux/store";
 import { showErrorToast, showSuccessToast } from "../components/Toast";
@@ -12,10 +12,10 @@ import { showErrorToast, showSuccessToast } from "../components/Toast";
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
 
-    const [emailError, showEmailError] = useState(false);
-    const [passError, showPassError] = useState(false);
+    // const [emailError, showEmailError] = useState(false);
+    // const [passError, showPassError] = useState(false);
     const [emptyFieldsErr, setEmptyFieldsErr] = useState(false);
 
     const [loginUserObj, setLoginUserObj] = useState<LoginFormUser>({
@@ -28,16 +28,6 @@ function Login() {
         (state: RootState) => state.auth.loggedInUser
     );
     // console.log("Logged user", loggedUser);
-
-    // Get users. !!! Check HTTP with Boris to get users from BE
-    // const {
-    //     data: users,
-    //     isLoading: usersIsLoading,
-    //     error: usersError,
-    // } = useQuery({
-    //     queryKey: ["users"],
-    //     queryFn: getUsers,
-    // });
 
     // HTTP POST, BE vraca Usera
     const loginUserMutation = useMutation({

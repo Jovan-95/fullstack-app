@@ -3,6 +3,7 @@
 @import "./scss/pages/single-page.scss";
 @import "./scss/pages/profile.scss";
 @import "./scss/pages/dashboard.scss";
+@import "./scss/pages/courses.scss";
 @import "./scss/components/sidebar.scss";
 @import "./scss/components/pagination.scss";
 @import "./scss/components/layout.scss";
@@ -31,4 +32,12 @@ a {
 
 .d-none {
     display: none;
+}
+
+.mt-16 {
+    margin-top: 16px;
+}
+
+.ml-8 {
+    margin-left: 8px;
 }

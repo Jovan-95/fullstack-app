@@ -147,12 +147,16 @@ function Profile() {
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
-                            <button
-                                onClick={handleUpload}
-                                className="btn btn-primary btn-sm change-photo"
-                            >
-                                Upload
-                            </button>
+                            {selectedFile ? (
+                                <button
+                                    onClick={handleUpload}
+                                    className="btn btn-primary btn-sm change-photo"
+                                >
+                                    Upload
+                                </button>
+                            ) : (
+                                ""
+                            )}
                         </div>
                     </div>
 
@@ -335,6 +339,7 @@ function Profile() {
                                 id="email"
                                 className="form-input"
                                 placeholder="Enter email"
+                                value={loggedUser?.email}
                             />
                         </div>
                         <div
@@ -363,7 +368,7 @@ function Profile() {
                                                 gender_id: 1,
                                             })
                                         }
-                                        value="male"
+                                        value={loggedUser?.gender_id}
                                     />
                                     <span className="custom-radio"></span>
                                     Male

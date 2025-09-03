@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUsers } from "../../services/userServices";
+import { deleteUser, getUsers } from "../../services/userServices";
+import { showErrorToast, showSuccessToast } from "../../components/Toast";
+import { useState } from "react";
+import Modal from "../../components/Modal";
 
 function SingleUser() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const [modal, setModal] = useState<boolean>(false);
 
+    // Get users
     const {
         data: users,
         isLoading,
@@ -16,6 +22,17 @@ function SingleUser() {
         queryFn: getUsers,
     });
 
+    const deleteUserMutation = useMutation({
+        mutationFn: deleteUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+            showSuccessToast("User deleted successfully!");
+        },
+        onError: () => {
+            showErrorToast("Failed to delete user!");
+        },
+    });
+
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>{(error as Error).message}</p>;
     if (!users) return <p>No data found.</p>;
@@ -23,6 +40,13 @@ function SingleUser() {
     const singleUser = users.data.find((user) => user.id === Number(id));
     if (!singleUser) return <p>User not found.</p>;
 
+    // Open Delete modal
+    function handleDeleteModal() {
+        setModal(true);
+    }
+
+    // Delete user
+    function handleUserDelete() {}
     return (
         <div className="single-user">
             <div className="user-card">
@@ -60,7 +84,9 @@ function SingleUser() {
 
                 <div className="user-actions">
                     <button className="btn edit">Edit User</button>
-                    <button className="btn delete">Delete User</button>
+                    <button onClick={handleDeleteModal} className="btn delete">
+                        Delete User
+                    </button>
                     <button
                         onClick={() => navigate("/admin/users")}
                         className="btn"
@@ -68,6 +94,38 @@ function SingleUser() {
                         Back to users
                     </button>
                 </div>
+            </div>
+            <div className={modal ? "d-block" : "d-none"}>
+                <Modal>
+                    {" "}
+                    <>
+                        <div
+                            className="p-20"
+                            onClick={() => setModal(false)}
+                            style={{
+                                textAlign: "right",
+                                cursor: "pointer",
+                                color: "black",
+                            }}
+                        >
+                            X
+                        </div>
+                        <div>
+                            <div className="user-actions">
+                                <h3>Delete this user?</h3>
+                                <button className="btn edit mt-16">
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleUserDelete}
+                                    className="btn btn-danger ml-8"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                </Modal>
             </div>
         </div>
     );

@@ -176,3 +176,24 @@ export async function searchUsers(query: string) {
         console.log(err);
     }
 }
+
+// Delete HTTP method. Ask Boris for route!!!
+export async function deleteUser(userId: number) {
+    try {
+        const res = await fetch(`${API_URL}/users/${userId}`, {
+            method: "DELETE",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`${res.status}, ${res.statusText}`);
+        }
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        throw new Error("Failed to delete user: " + err);
+    }
+}
