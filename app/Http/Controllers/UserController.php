@@ -8,19 +8,27 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\EditUserImageRequest;
+use App\Http\Requests\UsersSreachRequest;
 use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
 {
-public function getUsers()
+public function getUsers(UsersSreachRequest $request)
 {
     
+$search = $request->input('users_search');
+
     $users = User::with([
             'gender:id,name',
             'roles:id,name' 
         ])
         ->whereDoesntHave('roles', fn ($q) => $q->where('name', 'admin'))
+        ->when($search, function ($query, $search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+                  });
+        })
         ->paginate(10);
 
    
