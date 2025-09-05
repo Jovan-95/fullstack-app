@@ -23,7 +23,7 @@ function Users() {
 
     // Search
     const [users_search, setUsersSearch] = useState("");
-    const debouncedSearch = useDebounce(users_search, 500); // čeka 500ms
+    const debouncedSearch = useDebounce(users_search, 1000); // čeka 500ms
 
     // Get users
     const {

@@ -2,10 +2,10 @@ import { LoginFormUser, PaginatedUser, User } from "../types";
 
 const API_URL = "http://localhost:8000/api";
 
-// Get Users with pagination HTTP method
+// Get Users with pagination and search HTTP method
 export async function getUsers(
     page: number = 1,
-    search_users: string = ""
+    users_search: string = ""
 ): Promise<PaginatedUser> {
     try {
         const storedUser = localStorage.getItem("loggedInUser");
@@ -13,8 +13,8 @@ export async function getUsers(
         if (!token) throw new Error("No token found");
 
         let url = `${API_URL}/users?page=${page}`;
-        if (search_users.trim()) {
-            url += `&search=${encodeURIComponent(search_users)}`;
+        if (users_search.trim()) {
+            url += `&users_search=${encodeURIComponent(users_search)}`;
         }
 
         const res = await fetch(url, {
