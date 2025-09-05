@@ -165,26 +165,6 @@ export async function uploadAvatar(file: File) {
     }
 }
 
-// Search users. !!!! Ask Boris for route
-// export async function searchUsers(search_users: string) {
-//     try {
-//         const res = await fetch(`${API_URL}/users/search`, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Accept: "application/json",
-//             },
-//             body: JSON.stringify({ search_users }),
-//         });
-//         if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
-//         const data = await res.json();
-//         console.log(data);
-//         return data;
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
 // Delete HTTP method. Ask Boris for route!!!
 export async function deleteUser(userId: number) {
     try {
@@ -203,5 +183,37 @@ export async function deleteUser(userId: number) {
         return data;
     } catch (err) {
         throw new Error("Failed to delete user: " + err);
+    }
+}
+
+// Get All with pagination and search HTTP method
+// !!! Ask for route and property names!!!
+export async function getAll(page: number = 1, search_term: string = "") {
+    try {
+        const storedUser = localStorage.getItem("loggedInUser");
+        const token = storedUser ? JSON.parse(storedUser).auth_token : null;
+        if (!token) throw new Error("No token found");
+
+        let url = `${API_URL}/users?page=${page}`;
+        if (search_term.trim()) {
+            url += `&search_term=${encodeURIComponent(search_term)}`;
+        }
+
+        const res = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) throw new Error("Greška kod fetchovanja korisnika");
+
+        const data = await res.json();
+        console.log(data);
+        return data; // Laravel pagination response
+    } catch (err) {
+        console.error(err);
+        return { data: [], current_page: 1, last_page: 1 };
     }
 }

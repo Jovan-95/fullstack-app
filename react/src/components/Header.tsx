@@ -2,9 +2,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../redux/store";
-import { useMutation } from "@tanstack/react-query";
-import { logoutUser } from "../services/userServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getAll, logoutUser } from "../services/userServices";
 import { removeUser } from "../redux/slice";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../hooks/useDebaunce";
+import Modal from "./Modal";
+import Pagination from "./Pagination";
 
 function Header() {
     const navigate = useNavigate();
@@ -20,6 +24,33 @@ function Header() {
         minute: "numeric",
         hour12: true,
     });
+
+    // Search all term
+    const [searchAll, setSearchAll] = useState<string>("");
+    const debouncedSearchAll = useDebounce(searchAll, 1000);
+
+    // Pagination
+    const [page, setPage] = useState(1);
+
+    // Get all HTTP req
+    /* Check BE for name property */
+    const {
+        data: searchData,
+        isLoading,
+        isError,
+    } = useQuery({
+        queryKey: ["globalSearch", page, debouncedSearchAll],
+        queryFn: () => getAll(page, debouncedSearchAll),
+        enabled: !!debouncedSearchAll, // poziva se samo kad postoji search term
+        staleTime: 1000 * 60 * 5,
+        cacheTime: 1000 * 60 * 30,
+        retry: 1,
+    });
+
+    // Reset nakon promene search inputa
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearchAll]);
 
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
@@ -44,6 +75,11 @@ function Header() {
         },
     });
 
+    // Error handling
+    if (isLoading) return <p>Loading...</p>;
+    if (isError) return <p>Error</p>;
+    // if (!searchData) return <p>No data found.</p>;
+
     function handleLogout() {
         logoutUserMutation.mutate();
     }
@@ -53,6 +89,8 @@ function Header() {
                 <div className="search-wrapper">
                     <img alt="" />
                     <input
+                        onChange={(e) => setSearchAll(e.target.value)}
+                        value={searchAll}
                         className="header-search"
                         placeholder="Search..."
                         type="search"
@@ -109,6 +147,32 @@ function Header() {
                     </div>
                 )}
             </div>
+            {searchAll ? (
+                <Modal>
+                    <>
+                        {" "}
+                        <div
+                            className="p-20"
+                            onClick={() => setSearchAll("")}
+                            style={{
+                                textAlign: "right",
+                                cursor: "pointer",
+                                color: "black",
+                            }}
+                        >
+                            X
+                        </div>
+                        {/* Check BE for name property */}
+                        <Pagination
+                            // currentPage={searchData.current_page}
+                            // lastPage={searchData.last_page}
+                            onPageChange={(p: number) => setPage(p)}
+                        />
+                    </>
+                </Modal>
+            ) : (
+                ""
+            )}
         </div>
     );
 }
