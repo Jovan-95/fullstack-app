@@ -8,6 +8,7 @@ import { DragAndDropResult, ListedUser, PaginatedUser } from "../../types";
 import { showErrorToast } from "../../components/Toast";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useOnlineStatus } from "../../hooks/useOnlineStatus";
+import { useDebounce } from "../../hooks/useDebaunce";
 
 function Users() {
     // Pagination
@@ -22,6 +23,7 @@ function Users() {
 
     // Search
     const [users_search, setUsersSearch] = useState("");
+    const debouncedSearch = useDebounce(users_search, 500); // čeka 500ms
 
     // Get users
     const {
@@ -30,8 +32,8 @@ function Users() {
         isError,
         error,
     } = useQuery<PaginatedUser>({
-        queryKey: ["users", page, users_search],
-        queryFn: () => getUsers(page, users_search),
+        queryKey: ["users", page, debouncedSearch],
+        queryFn: () => getUsers(page, debouncedSearch),
         staleTime: 1000 * 60 * 5, // 5 minuta čuvaj podatke sveži
         cacheTime: 1000 * 60 * 30, // pola sata u memoriji
         retry: 1, // probaj samo jednom da refetchaš, pa fallback na cache
@@ -39,6 +41,7 @@ function Users() {
 
     // console.log("data: usersData", usersData);
 
+    // Drag and drop part
     useEffect(() => {
         if (usersData) {
             setUsers(usersData.data);
@@ -115,6 +118,7 @@ function Users() {
                     <span>Search</span>
                 </button> */}
                 <input
+                    style={{ width: "100%" }}
                     onChange={(e) => setUsersSearch(e.target.value)}
                     className="header-search"
                     placeholder="Search users..."
