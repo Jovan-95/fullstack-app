@@ -21,7 +21,7 @@ function Users() {
     const isOnline = useOnlineStatus();
 
     // Search
-    const [query, setQuery] = useState("");
+    const [users_search, setUsersSearch] = useState("");
 
     // Get users
     const {
@@ -30,8 +30,8 @@ function Users() {
         isError,
         error,
     } = useQuery<PaginatedUser>({
-        queryKey: ["users", page],
-        queryFn: () => getUsers(page),
+        queryKey: ["users", page, users_search],
+        queryFn: () => getUsers(page, users_search),
         staleTime: 1000 * 60 * 5, // 5 minuta čuvaj podatke sveži
         cacheTime: 1000 * 60 * 30, // pola sata u memoriji
         retry: 1, // probaj samo jednom da refetchaš, pa fallback na cache
@@ -45,25 +45,13 @@ function Users() {
         }
     }, [usersData]);
 
-    // HTTP POST Search user
-    const searchUserMutation = useMutation({
-        mutationFn: searchUsers,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["search", query] });
-        },
-        onError: (err) => {
-            showErrorToast("Search failed!");
-        },
-    });
-
     // Search user function
-    function handleSearch() {
-        if (!query.trim()) {
-            showErrorToast("Please enter a search term!");
-            return;
-        }
-        searchUserMutation.mutate(query);
-    }
+    // function handleSearch() {
+    //     if (!users_search.trim()) {
+    //         showErrorToast("Please enter a search term!");
+    //         return;
+    //     }
+    // }
 
     if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>{(error as Error).message}</p>;
@@ -123,11 +111,11 @@ function Users() {
             <h1 className="users-title">Users</h1>
             <div className="search-wrapper">
                 {/* <img alt="" /> */}
-                <button onClick={handleSearch} className="btn btn-primary">
+                {/* <button onClick={handleSearch} className="btn btn-primary">
                     <span>Search</span>
-                </button>
+                </button> */}
                 <input
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => setUsersSearch(e.target.value)}
                     className="header-search"
                     placeholder="Search users..."
                     type="search"

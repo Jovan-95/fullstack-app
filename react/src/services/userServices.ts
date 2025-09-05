@@ -3,13 +3,21 @@ import { LoginFormUser, PaginatedUser, User } from "../types";
 const API_URL = "http://localhost:8000/api";
 
 // Get Users with pagination HTTP method
-export async function getUsers(page: number = 1): Promise<PaginatedUser> {
+export async function getUsers(
+    page: number = 1,
+    search_users: string = ""
+): Promise<PaginatedUser> {
     try {
         const storedUser = localStorage.getItem("loggedInUser");
         const token = storedUser ? JSON.parse(storedUser).auth_token : null;
         if (!token) throw new Error("No token found");
 
-        const res = await fetch(`${API_URL}/users?page=${page}`, {
+        let url = `${API_URL}/users?page=${page}`;
+        if (search_users.trim()) {
+            url += `&search=${encodeURIComponent(search_users)}`;
+        }
+
+        const res = await fetch(url, {
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
@@ -158,24 +166,24 @@ export async function uploadAvatar(file: File) {
 }
 
 // Search users. !!!! Ask Boris for route
-export async function searchUsers(query: string) {
-    try {
-        const res = await fetch(`${API_URL}/users/search`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            body: JSON.stringify({ query }),
-        });
-        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
-        const data = await res.json();
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.log(err);
-    }
-}
+// export async function searchUsers(search_users: string) {
+//     try {
+//         const res = await fetch(`${API_URL}/users/search`, {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Accept: "application/json",
+//             },
+//             body: JSON.stringify({ search_users }),
+//         });
+//         if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+//         const data = await res.json();
+//         console.log(data);
+//         return data;
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 
 // Delete HTTP method. Ask Boris for route!!!
 export async function deleteUser(userId: number) {
