@@ -1,9 +1,9 @@
-import { LoginFormUser, User } from "../types";
+import { LoginFormUser, PaginatedUser, User } from "../types";
 
 const API_URL = "http://localhost:8000/api";
 
 // Get Users with pagination HTTP method
-export async function getUsers(page: number = 1) {
+export async function getUsers(page: number = 1): Promise<PaginatedUser> {
     try {
         const storedUser = localStorage.getItem("loggedInUser");
         const token = storedUser ? JSON.parse(storedUser).auth_token : null;

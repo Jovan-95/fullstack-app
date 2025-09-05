@@ -4,17 +4,19 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getUsers, searchUsers } from "../../services/userServices";
 import Pagination from "../../components/Pagination";
-import { ListedUser } from "../../types";
+import { DragAndDropResult, ListedUser, PaginatedUser } from "../../types";
 import { showErrorToast } from "../../components/Toast";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 
 function Users() {
+    // Pagination
     const [page, setPage] = useState(1);
     const queryClient = useQueryClient();
 
     // Drag and drop
     const [users, setUsers] = useState<ListedUser[]>([]);
+
     // Offline mode
     const isOnline = useOnlineStatus();
 
@@ -26,9 +28,8 @@ function Users() {
         data: usersData,
         isLoading,
         isError,
-        isFetching,
         error,
-    } = useQuery({
+    } = useQuery<PaginatedUser>({
         queryKey: ["users", page],
         queryFn: () => getUsers(page),
         staleTime: 1000 * 60 * 5, // 5 minuta čuvaj podatke sveži
@@ -36,8 +37,10 @@ function Users() {
         retry: 1, // probaj samo jednom da refetchaš, pa fallback na cache
     });
 
+    // console.log("data: usersData", usersData);
+
     useEffect(() => {
-        if (usersData?.data) {
+        if (usersData) {
             setUsers(usersData.data);
         }
     }, [usersData]);
@@ -67,8 +70,9 @@ function Users() {
     if (!usersData || usersData.data.length === 0)
         return <p>No users found.</p>;
 
-    // funkcija koja menja redosled kad prevučeš
-    function handleOnDragEnd(result: DropResult) {
+    // Drag and Drop function
+    function handleOnDragEnd(result: DragAndDropResult) {
+        // console.log(result);
         if (!result.destination) return;
 
         const items = Array.from(users);
@@ -77,6 +81,43 @@ function Users() {
 
         setUsers(items);
     }
+
+    // Offline mode if connection is lost
+    if (!isOnline && users.length > 0) {
+        return (
+            <div className="users-page">
+                <h1 className="users-title">Users</h1>
+                <div className="offline-banner">
+                    🚨 Offline Mode – prikazujemo poslednje sačuvane podatke
+                </div>
+
+                <div className="user-list users-grid">
+                    {" "}
+                    {/* lista usera iz cache-a */}
+                    {users.map((user: ListedUser) => (
+                        <NavLink to={`/admin/users/${user.id}`}>
+                            <div className="user-card">
+                                <img
+                                    src={
+                                        user.profile_image ||
+                                        "https://via.placeholder.com/100"
+                                    }
+                                    alt="User Avatar"
+                                />
+                                <h2>{user.name}</h2>
+                                <p>Email: {user.email}</p>
+                                <button className="view-btn">
+                                    View Profile
+                                </button>
+                            </div>
+                        </NavLink>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // Online regular
     return (
         <div className="users-page">
             <h1 className="users-title">Users</h1>
