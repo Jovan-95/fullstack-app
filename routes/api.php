@@ -16,3 +16,7 @@ Route::post('register', [\App\Http\Controllers\AuthController::class, 'register'
 Route::get('users', [\App\Http\Controllers\UserController::class, 'getUsers'])->middleware('auth:sanctum');
 Route::patch('user/settings', [\App\Http\Controllers\UserController::class, 'updateProfile'])->middleware('auth:sanctum');
 Route::patch('user/avatar', [\App\Http\Controllers\UserController::class, 'updateAvatar'])->middleware('auth:sanctum');
+
+
+///////////////////////////////////////////GLOBAL SEARCH
+Route::get('search', [\App\Http\Controllers\SearchController::class, 'globalSearch'])->middleware('auth:sanctum');
