@@ -6,7 +6,8 @@
         align-items: center;
         margin-left: 40px;
         margin-bottom: 60px;
-        border: 1px solid #344054;
+        border: 1px solid #c2c8d2;
+        border-radius: 12px;
         img {
             margin-right: 8px;
             cursor: pointer;
@@ -21,6 +22,7 @@
             border: none;
             color: #344054;
             font-size: 18px;
+            margin-inline: 10px;
         }
         input::placeholder {
             color: black;
@@ -50,6 +52,7 @@
         text-align: center;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         transition: transform 0.2s ease;
+        min-height: 300px;
 
         &:hover {
             transform: translateY(-5px);
@@ -61,7 +64,7 @@
         }
 
         h2 {
-            font-size: 1.2rem;
+            font-size: 16px !important;
             margin: 0.5rem 0;
             color: #222;
         }

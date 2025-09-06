@@ -24,9 +24,14 @@
                         background-color: transparent;
                         border: none;
                         color: white;
+                        padding: 8px;
                     }
                     input::placeholder {
                         color: white;
+                    }
+
+                    input:focus {
+                        outline: none;
                     }
                 }
                 .time-wrapper {
@@ -35,6 +40,9 @@
                     .time {
                         color: white;
                         padding-inline: 8px;
+                    }
+                    @media screen and (max-width: 425px) {
+                        display: none;
                     }
                 }
                 .profile-wrapper {
@@ -67,6 +75,29 @@
                     }
                 }
             }
+            @media screen and (max-width: 425px) {
+                display: none;
+            }
+        }
+
+        .mobile-header-wrapper {
+            background: linear-gradient(to top, #2a5298, #141e30);
+
+            display: none;
+            padding: 8px;
+            .hamburger-wrapper {
+                display: flex;
+                justify-content: end;
+                svg {
+                    cursor: pointer;
+                }
+            }
+            @media screen and (max-width: 425px) {
+                display: block;
+            }
+        }
+        @media screen and (max-width: 425px) {
+            margin-left: 0;
         }
     }
 }

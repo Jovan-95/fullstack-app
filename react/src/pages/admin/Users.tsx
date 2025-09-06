@@ -156,7 +156,10 @@ function Users() {
                                                     alt="User Avatar"
                                                 />
                                                 <h2>{user.name}</h2>
-                                                <p>Email: {user.email}</p>
+                                                <p>
+                                                    Email:{" "}
+                                                    <div>{user.email}</div>{" "}
+                                                </p>
                                                 <button className="view-btn">
                                                     View Profile
                                                 </button>
