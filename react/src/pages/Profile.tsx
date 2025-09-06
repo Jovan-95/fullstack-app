@@ -49,10 +49,10 @@ function Profile() {
                 JSON.stringify({ ...storedUser, ...data.data })
             );
 
-            queryClient.invalidateQueries(["settings"]);
+            queryClient.invalidateQueries({ queryKey: ["settings"] });
         },
-        onError: (error: any) => {
-            showErrorToast(error?.message || "Failed to update user");
+        onError: () => {
+            showErrorToast("Failed to update user");
         },
     });
 
@@ -93,11 +93,11 @@ function Profile() {
         setModal(true);
 
         setEditedUserObj({
-            name: loggedUser?.name,
-            username: loggedUser?.username,
+            name: loggedUser?.name ?? "",
+            username: loggedUser?.username ?? "",
             password: "",
             password_confirmation: "",
-            gender_id: loggedUser?.gender_id,
+            gender_id: Number(loggedUser?.gender.id),
         });
     }
 
@@ -167,9 +167,9 @@ function Profile() {
                                 {" "}
                                 {loggedUser?.roles[0]}
                             </span>
-                            <span className="email">{loggedUser.email}</span>
+                            <span className="email">{loggedUser?.email}</span>
                             <span className="username">
-                                {loggedUser.username}
+                                {loggedUser?.username}
                             </span>
                         </div>
                         <div className="actions">
@@ -362,13 +362,13 @@ function Profile() {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        onChange={(e) =>
+                                        onChange={() =>
                                             setEditedUserObj({
                                                 ...editedUserObj,
                                                 gender_id: 1,
                                             })
                                         }
-                                        value={loggedUser?.gender_id}
+                                        value={loggedUser?.gender.id}
                                     />
                                     <span className="custom-radio"></span>
                                     Male
@@ -378,13 +378,13 @@ function Profile() {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        onChange={(e) =>
+                                        onChange={() =>
                                             setEditedUserObj({
                                                 ...editedUserObj,
                                                 gender_id: 2,
                                             })
                                         }
-                                        value="female"
+                                        value={loggedUser?.gender.id}
                                     />
                                     <span className="custom-radio"></span>
                                     Female

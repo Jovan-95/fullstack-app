@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    notifications: JSON.parse(localStorage.getItem("notifications")) || [],
+    notifications: JSON.parse(localStorage.getItem("notifications") ?? "[]"),
 };
 const notificationsSlice = createSlice({
     name: "notifications",
@@ -18,21 +18,21 @@ const notificationsSlice = createSlice({
                 JSON.stringify(state.notifications)
             );
         },
-        removeNotification: (state, action) => {
-            state.notifications = state.notifications.filter(
-                (note) => note.timestamp !== action.payload.timestamp
-            );
-            localStorage.setItem(
-                "notifications",
-                JSON.stringify(state.notifications)
-            );
-        },
+        // removeNotification: (state, action) => {
+        //     state.notifications = state.notifications.filter(
+        //         (note) => note.timestamp !== action.payload.timestamp
+        //     );
+        //     localStorage.setItem(
+        //         "notifications",
+        //         JSON.stringify(state.notifications)
+        //     );
+        // },
         clearNotifications: (state) => {
             state.notifications = [];
             localStorage.removeItem("notifications");
         },
     },
 });
-export const { addNotification, removeNotification, clearNotifications } =
+export const { addNotification, clearNotifications } =
     notificationsSlice.actions;
 export default notificationsSlice.reducer;

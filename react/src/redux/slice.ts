@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../types";
+import { LoggedUser } from "../types";
 
 type AuthState = {
-    loggedInUser: User | null;
+    loggedInUser: LoggedUser | null;
 };
 
 const initialState: AuthState = {
@@ -16,7 +16,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         // Add logic for login
-        addLoggedUser: (state, action: PayloadAction<User>) => {
+        addLoggedUser: (state, action: PayloadAction<LoggedUser>) => {
             state.loggedInUser = action.payload;
             localStorage.setItem(
                 "loggedInUser",

@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteUser, getUsers } from "../../services/userServices";
-import { showErrorToast, showSuccessToast } from "../../components/Toast";
+import { getUsers } from "../../services/userServices";
 import { useState } from "react";
 import Modal from "../../components/Modal";
 
 function SingleUser() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
     const [modal, setModal] = useState<boolean>(false);
 
     // Get users
@@ -19,25 +18,26 @@ function SingleUser() {
         error,
     } = useQuery({
         queryKey: ["users"],
-        queryFn: getUsers,
+        queryFn: () => getUsers(),
     });
 
-    const deleteUserMutation = useMutation({
-        mutationFn: deleteUser,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["users"] });
-            showSuccessToast("User deleted successfully!");
-        },
-        onError: () => {
-            showErrorToast("Failed to delete user!");
-        },
-    });
+    // const deleteUserMutation = useMutation({
+    //     mutationFn: deleteUser,
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries({ queryKey: ["users"] });
+    //         showSuccessToast("User deleted successfully!");
+    //     },
+    //     onError: () => {
+    //         showErrorToast("Failed to delete user!");
+    //     },
+    // });
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>{(error as Error).message}</p>;
     if (!users) return <p>No data found.</p>;
 
     const singleUser = users.data.find((user) => user.id === Number(id));
+    console.log("Single User", singleUser);
     if (!singleUser) return <p>User not found.</p>;
 
     // Open Delete modal
@@ -63,7 +63,9 @@ function SingleUser() {
                         <h2 className="user-name">{singleUser.name}</h2>
                         <p className="user-email">{singleUser.email}</p>
                         <span className="user-role">
-                            {singleUser.role || "User"}
+                            {singleUser?.roles.map((role) => (
+                                <span key={role.id}>{role.name}</span>
+                            ))}
                         </span>
                     </div>
                 </div>
@@ -74,11 +76,11 @@ function SingleUser() {
                     </p>
                     <p>
                         <strong>Last Login:</strong>{" "}
-                        {singleUser.last_login || "N/A"}
+                        {singleUser.updated_at || "N/A"}
                     </p>
                     <p>
                         <strong>About:</strong>{" "}
-                        {singleUser.about || "No description provided."}
+                        {singleUser.username || "No description provided."}
                     </p>
                 </div>
 

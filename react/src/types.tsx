@@ -1,6 +1,4 @@
-import { current } from "@reduxjs/toolkit";
-
-// User
+// User for register
 export type User = {
     name: string;
     username: string;
@@ -8,6 +6,18 @@ export type User = {
     password: string;
     password_confirmation: string;
     gender_id: number;
+};
+
+// Real User
+export type LoggedUser = {
+    auth_token: string;
+    email: string;
+    gender: { id: number; name: string };
+    id: number;
+    name: string;
+    profile_image: string;
+    roles: string[];
+    username: string;
 };
 
 // Login form user
@@ -23,7 +33,7 @@ export type PaginatedUser = {
     from: number;
     last_page: number;
     last_page_url: string;
-    links: any[];
+    links: unknown[];
     next_page_url: string;
     path: string;
     per_page: number;
@@ -42,7 +52,7 @@ export type ListedUser = {
     id: number;
     name: string;
     profile_image: string;
-    roles: [];
+    roles: [{ id: number; name: string }];
     updated_at: string;
     username: string;
 };

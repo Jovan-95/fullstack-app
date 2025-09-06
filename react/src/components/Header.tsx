@@ -10,6 +10,7 @@ import { useDebounce } from "../hooks/useDebaunce";
 import Modal from "./Modal";
 import Pagination from "./Pagination";
 import MobileModal from "./MobileModal";
+import { showErrorToast } from "./Toast";
 
 function Header() {
     const navigate = useNavigate();
@@ -47,9 +48,10 @@ function Header() {
         queryFn: () => getAll(page, debouncedSearchAll),
         enabled: !!debouncedSearchAll, // poziva se samo kad postoji search term
         staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 30,
+        gcTime: 1000 * 60 * 30,
         retry: 1,
     });
+    console.log("!!! temporary use because of build: ", searchData);
 
     // Reset nakon promene search inputa
     useEffect(() => {
@@ -59,11 +61,12 @@ function Header() {
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
+    console.log("logged user", loggedUser);
 
     // HTTP POST
     const logoutUserMutation = useMutation({
         mutationFn: logoutUser,
-        onSuccess: (data) => {
+        onSuccess: () => {
             // Čišćenje localStorage
             localStorage.removeItem("loggedInUser");
             localStorage.removeItem("auth_token");
@@ -74,8 +77,8 @@ function Header() {
             // Navigation
             navigate("/login");
         },
-        onError: (err) => {
-            alert("Logout failed!");
+        onError: () => {
+            showErrorToast("Logout failed!");
         },
     });
 
@@ -174,8 +177,8 @@ function Header() {
                             </div>
                             {/* Check BE for name property */}
                             <Pagination
-                                // currentPage={searchData.current_page}
-                                // lastPage={searchData.last_page}
+                                currentPage={searchData.current_page}
+                                lastPage={searchData.last_page}
                                 onPageChange={(p: number) => setPage(p)}
                             />
                         </>
@@ -184,6 +187,8 @@ function Header() {
                     ""
                 )}
             </div>
+
+            {/* Mobile header wrapper */}
             <div className="mobile-header-wrapper">
                 <div className="hamburger-wrapper">
                     <svg

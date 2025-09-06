@@ -2,11 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginFormUser } from "../types";
-import { useDispatch, useSelector } from "react-redux";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../services/userServices";
 import { addLoggedUser } from "../redux/slice";
-import { RootState } from "../redux/store";
 import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function Login() {
@@ -24,9 +23,9 @@ function Login() {
     });
 
     // Get logged user from Redux
-    const loggedUser = useSelector(
-        (state: RootState) => state.auth.loggedInUser
-    );
+    // const loggedUser = useSelector(
+    //     (state: RootState) => state.auth.loggedInUser
+    // );
     // console.log("Logged user", loggedUser);
 
     // HTTP POST, BE vraca Usera
@@ -47,7 +46,7 @@ function Login() {
                 navigate("/");
             }
         },
-        onError: (err) => {
+        onError: () => {
             showErrorToast("Login failed!");
         },
     });

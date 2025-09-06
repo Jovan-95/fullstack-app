@@ -32,7 +32,21 @@ export async function getUsers(
         return data; // Laravel pagination response
     } catch (err) {
         console.error(err);
-        return { data: [], current_page: 1, last_page: 1 };
+        return {
+            data: [],
+            current_page: 1,
+            first_page_url: "",
+            from: 0,
+            last_page: 1,
+            last_page_url: "",
+            links: [],
+            next_page_url: "", // ako tvoj backend može biti null
+            path: "",
+            per_page: 0,
+            prev_page_url: 0,
+            to: 0,
+            total: 0,
+        };
     }
 }
 

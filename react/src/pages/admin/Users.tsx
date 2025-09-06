@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { getUsers, searchUsers } from "../../services/userServices";
+import { getUsers } from "../../services/userServices";
 import Pagination from "../../components/Pagination";
 import { DragAndDropResult, ListedUser, PaginatedUser } from "../../types";
-import { showErrorToast } from "../../components/Toast";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 import { useDebounce } from "../../hooks/useDebaunce";
@@ -13,7 +12,6 @@ import { useDebounce } from "../../hooks/useDebaunce";
 function Users() {
     // Pagination
     const [page, setPage] = useState(1);
-    const queryClient = useQueryClient();
 
     // Drag and drop
     const [users, setUsers] = useState<ListedUser[]>([]);
@@ -35,7 +33,7 @@ function Users() {
         queryKey: ["users", page, debouncedSearch],
         queryFn: () => getUsers(page, debouncedSearch),
         staleTime: 1000 * 60 * 5, // 5 minuta čuvaj podatke sveži
-        cacheTime: 1000 * 60 * 30, // pola sata u memoriji
+        gcTime: 1000 * 60 * 30, // pola sata u memoriji
         retry: 1, // probaj samo jednom da refetchaš, pa fallback na cache
     });
 
@@ -126,7 +124,7 @@ function Users() {
                 />
             </div>
 
-            <DragDropContext onDragEnd={handleOnDragEnd}>
+            <DragDropContext onDragEnd={() => handleOnDragEnd}>
                 <Droppable droppableId="users">
                     {(provided) => (
                         <div

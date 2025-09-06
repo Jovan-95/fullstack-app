@@ -17,6 +17,7 @@ function Sidebar() {
     const logoutUserMutation = useMutation({
         mutationFn: logoutUser,
         onSuccess: (data) => {
+            console.log("Temporary use because of build", data);
             // Čišćenje localStorage
             localStorage.removeItem("loggedInUser");
             localStorage.removeItem("auth_token");
@@ -28,6 +29,8 @@ function Sidebar() {
             navigate("/login");
         },
         onError: (err) => {
+            console.log("Temporary use because of build", err);
+
             alert("Logout failed!");
         },
     });

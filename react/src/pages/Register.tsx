@@ -31,7 +31,7 @@ function Register() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["register"] });
         },
-        onError: (err) => {
+        onError: () => {
             showErrorToast("Registration failed!");
         },
     });
@@ -223,7 +223,7 @@ function Register() {
                     <div className="radio-buttons">
                         <label className="radio-label">
                             <input
-                                onChange={(e) =>
+                                onChange={() =>
                                     setUserObj({
                                         ...userObj,
                                         gender_id: 1,
@@ -239,7 +239,7 @@ function Register() {
 
                         <label className="radio-label">
                             <input
-                                onChange={(e) =>
+                                onChange={() =>
                                     setUserObj({
                                         ...userObj,
                                         gender_id: 2,

@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { PrivateRouteProps } from "../interfaces";
 
-function PrivateRoute({ children, requiredRole }: PrivateRouteProps) {
+function PrivateRoute({ children }: PrivateRouteProps) {
     const user = useSelector((state: RootState) => state.auth.loggedInUser);
 
     if (!user) {
