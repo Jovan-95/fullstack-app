@@ -109,7 +109,7 @@ function Register() {
                 <div className="auth-logo">
                     {" "}
                     <svg
-                        width="500"
+                        width="200"
                         height="50"
                         viewBox="0 0 599 145"
                         fill="none"
