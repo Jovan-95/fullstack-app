@@ -8,8 +8,8 @@ export default defineConfig({
         VitePWA({
             registerType: "autoUpdate", // service worker se update-uje automatski
             manifest: {
-                name: "Movie Review Platform",
-                short_name: "Movies",
+                name: "Learnify Platform",
+                short_name: "Learnify",
                 start_url: "/",
                 display: "standalone",
                 background_color: "#ffffff",
@@ -24,6 +24,20 @@ export default defineConfig({
                         src: "/pwa-512x512.png",
                         sizes: "512x512",
                         type: "image/png",
+                    },
+                ],
+                screenshots: [
+                    {
+                        src: "/home-phone.png",
+                        sizes: "375x604",
+                        type: "image/png",
+                        form_factor: "narrow",
+                    },
+                    {
+                        src: "/home-desktop.png",
+                        sizes: "1344x609",
+                        type: "image/png",
+                        form_factor: "wide",
                     },
                 ],
             },
