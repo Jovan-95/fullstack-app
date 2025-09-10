@@ -35,7 +35,7 @@ $search = $request->input('users_search');
 
     return response()->json($users);
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
  public function updateProfile(EditUserRequest $request)
     {
         $user = Auth::user(); 
@@ -101,6 +101,10 @@ return response()->json([
             'roles'         => $user->getRoleNames(),
         ],
     ], 200);
+}
+public function deleteUser(User $user) {
+    $user->delete();
+    return response()->json(['message' => 'User deleted']);
 }
 
 }
