@@ -67,3 +67,11 @@ export type DragAndDropResult = {
     source: { droppableId: string; index: number };
     type: string;
 };
+
+// Reset user obj
+export type ResetUserObj = {
+    email: string;
+    token: string;
+    password: string;
+    password_confirmation: string;
+};

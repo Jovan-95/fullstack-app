@@ -1,7 +1,32 @@
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { forgotPasswordReq } from "../services/userServices";
+import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function ForgotPassword() {
     const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+
+    // HTTP POST
+    const forgotPassMutation = useMutation({
+        mutationFn: forgotPasswordReq,
+        onSuccess: (data) => {
+            if (data && data.status) {
+                showSuccessToast("Instruction are sent to your email!");
+            }
+        },
+        onError: () => {
+            showErrorToast("Error!");
+        },
+    });
+
+    function handleForgotPass() {
+        if (email === "") return showErrorToast("Field is empty!");
+
+        forgotPassMutation.mutate(email);
+    }
+
     return (
         <div className="auth-wrapper">
             <div className="form-wrapper">
@@ -10,11 +35,18 @@ function ForgotPassword() {
 
                 <div className="input-wrapper">
                     <label>Email</label>
-                    <input type="email" />
+                    <input
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                    />
                 </div>
 
                 <div className="button-wrapper">
-                    <button className="btn btn-primary" type="submit">
+                    <button
+                        onClick={handleForgotPass}
+                        className="btn btn-primary"
+                        type="submit"
+                    >
                         <span>Continue</span>
                     </button>
                 </div>

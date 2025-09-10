@@ -1,4 +1,4 @@
-import { LoginFormUser, PaginatedUser, User } from "../types";
+import { LoginFormUser, PaginatedUser, ResetUserObj, User } from "../types";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -28,7 +28,7 @@ export async function getUsers(
         if (!res.ok) throw new Error("Greška kod fetchovanja korisnika");
 
         const data = await res.json();
-        console.log(data);
+        console.log("Get Users with search and pagination: ", data);
         return data; // Laravel pagination response
     } catch (err) {
         console.error(err);
@@ -179,7 +179,7 @@ export async function uploadAvatar(file: File) {
     }
 }
 
-// Delete HTTP method. Ask Boris for route!!!
+// Delete HTTP method. Ask BE for route!!!
 export async function deleteUser(userId: number) {
     try {
         const res = await fetch(`${API_URL}/users/${userId}`, {
@@ -229,5 +229,46 @@ export async function getAll(page: number = 1, search_term: string = "") {
     } catch (err) {
         console.error(err);
         return { data: [], current_page: 1, last_page: 1 };
+    }
+}
+
+// Forgot Password Post HTTP request. Ask BE for routes !!!
+export async function forgotPasswordReq(email: string) {
+    try {
+        const res = await fetch(`${API_URL}/forgot-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({ email }),
+        });
+        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+// Reset Password Post HTTP request. Ask BE for routes !!!
+export async function resetPasswordReq(resetUserObj: ResetUserObj) {
+    try {
+        const res = await fetch(`${API_URL}/reset-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify(resetUserObj),
+        });
+        if (!res.ok) throw new Error(`${res.status}, ${res.statusText}`);
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err);
     }
 }

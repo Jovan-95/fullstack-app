@@ -156,7 +156,13 @@ function Users() {
                                                 <h2>{user.name}</h2>
                                                 <p>
                                                     Email:{" "}
-                                                    <div>{user.email}</div>{" "}
+                                                    <span
+                                                        style={{
+                                                            display: "block",
+                                                        }}
+                                                    >
+                                                        {user.email}
+                                                    </span>{" "}
                                                 </p>
                                                 <button className="view-btn">
                                                     View Profile

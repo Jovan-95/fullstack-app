@@ -7,6 +7,7 @@ import SingleUser from "./pages/single-pages/SingleUser";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import { ToastContainer } from "react-toastify";
+import ResetPassword from "./pages/ResetPassword";
 
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
@@ -46,6 +47,10 @@ function App() {
                         <Route
                             path="/forgot-password"
                             element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/reset-password"
+                            element={<ResetPassword />}
                         />
 
                         <Route element={<Layout />}>
