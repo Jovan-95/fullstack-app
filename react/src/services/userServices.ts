@@ -28,7 +28,7 @@ export async function getUsers(
         if (!res.ok) throw new Error("Greška kod fetchovanja korisnika");
 
         const data = await res.json();
-        console.log("Get Users with search and pagination: ", data);
+        // console.log("Get Users with search and pagination: ", data);
         return data; // Laravel pagination response
     } catch (err) {
         console.error(err);
@@ -179,21 +179,29 @@ export async function uploadAvatar(file: File) {
     }
 }
 
-// Delete HTTP method. Ask BE for route!!!
+// Delete HTTP method
 export async function deleteUser(userId: number) {
     try {
+        const storedUser = localStorage.getItem("loggedInUser");
+        const token = storedUser ? JSON.parse(storedUser).auth_token : null;
+        // console.log("token", token);
+        if (!token) throw new Error("No token found");
+
         const res = await fetch(`${API_URL}/users/${userId}`, {
             method: "DELETE",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
             },
         });
         if (!res.ok) {
             throw new Error(`${res.status}, ${res.statusText}`);
         }
+        if (res.status === 204) return { message: "Deleted successfully" };
         const data = await res.json();
         console.log(data);
+
         return data;
     } catch (err) {
         throw new Error("Failed to delete user: " + err);
@@ -223,7 +231,7 @@ export async function getAll(page: number = 1, global_search: string = "") {
         if (!res.ok) throw new Error("Greška kod fetchovanja korisnika");
 
         const data = await res.json();
-        console.log(data);
+        // console.log('Get all search results with pag',data);
         return data; // Laravel pagination response
     } catch (err) {
         console.error(err);

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUsers } from "../../services/userServices";
+import { deleteUser, getUsers } from "../../services/userServices";
 import { useState } from "react";
 import Modal from "../../components/Modal";
+import { showErrorToast, showSuccessToast } from "../../components/Toast";
 
 function SingleUser() {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
     const [modal, setModal] = useState<boolean>(false);
 
     // Get users
@@ -17,20 +18,21 @@ function SingleUser() {
         isLoading,
         error,
     } = useQuery({
-        queryKey: ["users"],
+        queryKey: ["usersList"],
         queryFn: () => getUsers(),
     });
 
-    // const deleteUserMutation = useMutation({
-    //     mutationFn: deleteUser,
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ["users"] });
-    //         showSuccessToast("User deleted successfully!");
-    //     },
-    //     onError: () => {
-    //         showErrorToast("Failed to delete user!");
-    //     },
-    // });
+    const deleteUserMutation = useMutation({
+        mutationFn: deleteUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+            showSuccessToast("User deleted successfully!");
+            setModal(false);
+        },
+        onError: () => {
+            showErrorToast("Failed to delete user!");
+        },
+    });
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>{(error as Error).message}</p>;
@@ -46,7 +48,11 @@ function SingleUser() {
     }
 
     // Delete user
-    function handleUserDelete() {}
+    function handleUserDelete() {
+        console.log(id);
+        deleteUserMutation.mutate(Number(id));
+    }
+
     return (
         <div className="single-user">
             <div className="user-card">
@@ -115,7 +121,10 @@ function SingleUser() {
                         <div>
                             <div className="user-actions">
                                 <h3>Delete this user?</h3>
-                                <button className="btn edit mt-16">
+                                <button
+                                    onClick={() => setModal(false)}
+                                    className="btn edit mt-16"
+                                >
                                     Cancel
                                 </button>
                                 <button
