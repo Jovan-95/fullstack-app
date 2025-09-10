@@ -9,14 +9,14 @@ class SearchController extends Controller
 {
     public function globalSearch(Request $request)
     {
-        $searchTerm = $request->query('global_serach');
+        $searchTerm = $request->query('global_search');
         if ($searchTerm === null) {
         $searchTerm = '';
         }
         $searchTerm = trim($searchTerm);
         if ($searchTerm === '') {
         return response()->json([
-        'message' => 'Query param "global_serach" is required.'
+        'message' => 'Query param "global_search" is required.'
         ], 422);
 }   
 
