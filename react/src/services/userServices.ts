@@ -202,15 +202,15 @@ export async function deleteUser(userId: number) {
 
 // Get All with pagination and search HTTP method
 // !!! Ask for route and property names!!!
-export async function getAll(page: number = 1, search_term: string = "") {
+export async function getAll(page: number = 1, global_search: string = "") {
     try {
         const storedUser = localStorage.getItem("loggedInUser");
         const token = storedUser ? JSON.parse(storedUser).auth_token : null;
         if (!token) throw new Error("No token found");
 
-        let url = `${API_URL}/users?page=${page}`;
-        if (search_term.trim()) {
-            url += `&search_term=${encodeURIComponent(search_term)}`;
+        let url = `${API_URL}/search?page=${page}`;
+        if (global_search.trim()) {
+            url += `&global_search=${encodeURIComponent(global_search)}`;
         }
 
         const res = await fetch(url, {
@@ -232,7 +232,7 @@ export async function getAll(page: number = 1, search_term: string = "") {
     }
 }
 
-// Forgot Password Post HTTP request. Ask BE for routes !!!
+// Forgot Password Post HTTP request
 export async function forgotPasswordReq(email: string) {
     try {
         const res = await fetch(`${API_URL}/forgot-password`, {
@@ -253,7 +253,7 @@ export async function forgotPasswordReq(email: string) {
     }
 }
 
-// Reset Password Post HTTP request. Ask BE for routes !!!
+// Reset Password Post HTTP request
 export async function resetPasswordReq(resetUserObj: ResetUserObj) {
     try {
         const res = await fetch(`${API_URL}/reset-password`, {

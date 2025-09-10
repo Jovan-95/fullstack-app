@@ -1,4 +1,5 @@
 
+ <!-- Style mailtrap email -->
  <div> 
   <p class="email-paragraph mb-32">
      Hello, {{$user->name}} {{$user->last_name}},

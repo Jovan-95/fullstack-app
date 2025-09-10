@@ -1,15 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { resetPasswordReq } from "../services/userServices";
 import { showErrorToast, showSuccessToast } from "../components/Toast";
 
 function ResetPassword() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const token = searchParams.get("token") || "";
+    const email = searchParams.get("email") || "";
+
+    // console.log("token", token);
+    // console.log("email", email);
 
     const [resetUserObj, setResetUserObj] = useState({
-        email: "",
-        token: "",
+        email,
+        token,
         password: "",
         password_confirmation: "",
     });

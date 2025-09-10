@@ -44,14 +44,14 @@ function Header() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["globalSearch", page, debouncedSearchAll],
+        queryKey: ["search", page, debouncedSearchAll],
         queryFn: () => getAll(page, debouncedSearchAll),
         enabled: !!debouncedSearchAll, // poziva se samo kad postoji search term
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 30,
         retry: 1,
     });
-    console.log("!!! temporary use because of build: ", searchData);
+    console.log("!!! Global search data: ", searchData);
 
     // Reset nakon promene search inputa
     useEffect(() => {
@@ -61,7 +61,7 @@ function Header() {
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
-    console.log("logged user", loggedUser);
+    // console.log("logged user", loggedUser);
 
     // HTTP POST
     const logoutUserMutation = useMutation({
