@@ -43,3 +43,33 @@ a {
 .ml-8 {
     margin-left: 8px;
 }
+
+.searched-results {
+    max-height: 300px; /* ograničava visinu i dodaje scroll ako je više rezultata */
+    overflow-y: auto;
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
+
+.result {
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.3rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.result:hover {
+    background-color: #f0f0f0;
+    transform: translateX(2px);
+}
+
+.result:last-child {
+    margin-bottom: 0; /* uklanja marginu kod poslednjeg elementa */
+}

@@ -11,6 +11,7 @@ import Modal from "./Modal";
 import Pagination from "./Pagination";
 import MobileModal from "./MobileModal";
 import { showErrorToast } from "./Toast";
+import { SearchedResult } from "../types";
 
 function Header() {
     const navigate = useNavigate();
@@ -175,10 +176,21 @@ function Header() {
                             >
                                 X
                             </div>
-                            {/* Check BE for name property */}
+                            <div className="searched-results">
+                                {searchData?.data.map(
+                                    (searchedUser: SearchedResult) => (
+                                        <div
+                                            className="result"
+                                            key={searchedUser.id}
+                                        >
+                                            {searchedUser.name}
+                                        </div>
+                                    )
+                                )}
+                            </div>
                             <Pagination
-                                currentPage={searchData.current_page}
-                                lastPage={searchData.last_page}
+                                currentPage={searchData?.meta.current_page}
+                                lastPage={searchData?.meta.last_page}
                                 onPageChange={(p: number) => setPage(p)}
                             />
                         </>

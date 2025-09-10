@@ -56,29 +56,28 @@
             }
         }
     }
+}
+.pagination {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
 
-    .pagination {
-        margin-top: 1.5rem;
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
+    button {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        background: #eee;
+        cursor: pointer;
+        border-radius: 0.3rem;
 
-        button {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            background: #eee;
-            cursor: pointer;
-            border-radius: 0.3rem;
+        &.active {
+            background: #007bff;
+            color: white;
+        }
 
-            &.active {
-                background: #007bff;
-                color: white;
-            }
-
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     }
 }

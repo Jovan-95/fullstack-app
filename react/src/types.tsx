@@ -75,3 +75,11 @@ export type ResetUserObj = {
     password: string;
     password_confirmation: string;
 };
+
+// Global search
+export type SearchedResult = {
+    email: string;
+    id: string;
+    name: string;
+    username: string;
+};

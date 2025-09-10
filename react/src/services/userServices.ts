@@ -201,7 +201,6 @@ export async function deleteUser(userId: number) {
 }
 
 // Get All with pagination and search HTTP method
-// !!! Ask for route and property names!!!
 export async function getAll(page: number = 1, global_search: string = "") {
     try {
         const storedUser = localStorage.getItem("loggedInUser");
