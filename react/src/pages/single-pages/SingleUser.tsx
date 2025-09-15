@@ -99,7 +99,7 @@ function SingleUser() {
                         onClick={() => navigate("/admin/users")}
                         className="btn"
                     >
-                        Back to users
+                        <span>Back to users</span>
                     </button>
                 </div>
             </div>

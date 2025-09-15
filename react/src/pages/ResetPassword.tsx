@@ -48,6 +48,7 @@ function ResetPassword() {
             return showErrorToast("Password to short!");
 
         resetPassMutation.mutate(resetUserObj);
+        navigate("/login");
     }
 
     return (

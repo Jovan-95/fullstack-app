@@ -46,13 +46,13 @@
             margin-top: 0.5rem;
             padding: 0.3rem 0.6rem;
             border: none;
-            background-color: #007bff;
+            background-color: #059669;
             color: #fff;
             border-radius: 0.3rem;
             cursor: pointer;
 
             &:hover {
-                background-color: #0056b3;
+                background-color: #10b981;
             }
         }
     }
@@ -71,7 +71,7 @@
         border-radius: 0.3rem;
 
         &.active {
-            background: #007bff;
+            background: #059669;
             color: white;
         }
 

@@ -1,61 +1,100 @@
 .auth-wrapper {
-    background: linear-gradient(to top, #2a5298, #141e30);
+    background: linear-gradient(
+        135deg,
+        #34d399,
+        #059669
+    ); /* emerald → dark green */
     height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .form-wrapper {
         width: 500px;
-        background-color: white;
+        background: #ffffff;
         padding: 50px;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
         .auth-logo {
             font-size: 32px;
             font-weight: bold;
             line-height: 40px;
-            color: #344054;
+            color: #065f46; /* tamna zelena */
             display: flex;
             justify-content: center;
         }
+
         .auth-heading {
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 700;
             line-height: 40px;
-            color: #344054;
+            color: #059669; /* tamno siva */
             text-align: center;
+            margin-bottom: 16px;
         }
+
         .input-wrapper {
             margin-top: 16px;
+
             label {
                 display: block;
                 margin-bottom: 8px;
                 font-weight: 500;
-                font-size: 16px;
-                color: #333;
+                font-size: 15px;
+                color: #374151;
             }
+
             input {
                 margin-top: 8px;
                 width: 100%;
-                width: 100%;
                 padding: 12px 16px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
+                border: 1px solid #d1d5db;
+                border-radius: 10px;
                 font-size: 16px;
-                transition: border-color 0.3s, box-shadow 0.3s;
+                background: #f9fafb;
+                transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
             }
+
             input:focus {
-                border-color: #4f46e5;
+                border-color: #10b981; /* emerald zelena */
                 outline: none;
-                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+                background: #fff;
+                box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
             }
         }
+
         .button-wrapper {
-            margin-top: 16px;
+            margin-top: 20px;
             display: flex;
-            justify-content: end;
+            justify-content: flex-end;
             align-items: center;
 
             button {
+                background: linear-gradient(
+                    90deg,
+                    #10b981,
+                    #059669
+                ); /* emerald → dark green */
+                color: white;
+                font-weight: 600;
+                border: none;
+                border-radius: 10px;
+                padding: 12px 24px;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                    box-shadow: none;
+                }
+
                 @media screen and (max-width: 425px) {
                     width: 100%;
                 }
@@ -64,21 +103,23 @@
 
         .login-text {
             text-align: center;
-            font-size: 16px;
-            color: #344054;
-            margin-top: 16px;
+            font-size: 15px;
+            color: #4b5563;
+            margin-top: 20px;
+
             span {
-                color: #2a5298;
+                color: #10b981; /* emerald link */
                 font-weight: 600;
-                text-decoration: none;
                 margin-left: 4px;
-                transition: color 0.3s;
                 cursor: pointer;
+                transition: color 0.3s;
             }
+
             span:hover {
-                color: #3730a3;
+                color: #059669;
                 text-decoration: underline;
             }
+
             @media screen and (max-width: 425px) {
                 font-size: 14px;
             }

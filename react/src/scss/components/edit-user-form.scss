@@ -46,14 +46,5 @@
         font-weight: 600;
         cursor: pointer;
         transition: background 0.3s ease;
-
-        &.btn--primary {
-            background: #007bff;
-            color: #fff;
-
-            &:hover {
-                background: #0056b3;
-            }
-        }
     }
 }

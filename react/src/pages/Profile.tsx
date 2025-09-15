@@ -27,7 +27,6 @@ function Profile() {
     const loggedUser = useSelector(
         (state: RootState) => state.auth.loggedInUser
     );
-    // console.log("Logged user:", loggedUser);
 
     //// Patch HTTP method Edit user
     const { mutate: editUserFormFields } = useMutation({
@@ -50,6 +49,7 @@ function Profile() {
             );
 
             queryClient.invalidateQueries({ queryKey: ["settings"] });
+            showSuccessToast("User is updated!");
         },
         onError: () => {
             showErrorToast("Failed to update user");
@@ -125,7 +125,7 @@ function Profile() {
             editedObj: editedUserObj,
         });
 
-        showSuccessToast("Changes are saved!");
+        // showSuccessToast("Changes are saved!");
         setModal(false);
     }
     return (
@@ -223,42 +223,6 @@ function Profile() {
                 </aside>
 
                 <main className="right-column">
-                    <div className="card timeline-card">
-                        <h3>Recent Activity</h3>
-                        <ul className="timeline">
-                            <li>
-                                <span className="dot"></span>
-                                <div className="item">
-                                    <div className="title">
-                                        Published new course “Advanced React
-                                        Patterns”
-                                    </div>
-                                    <div className="time">Today • 10:24</div>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="dot"></span>
-                                <div className="item">
-                                    <div className="title">
-                                        Updated lesson “Redux Toolkit Basics”
-                                    </div>
-                                    <div className="time">
-                                        Yesterday • 18:03
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="dot"></span>
-                                <div className="item">
-                                    <div className="title">
-                                        Replied to 4 Q&A messages
-                                    </div>
-                                    <div className="time">Aug 10 • 14:55</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div className="card settings-card">
                         <h3>Quick Settings</h3>
                         <div className="settings-grid">
@@ -428,7 +392,7 @@ function Profile() {
                         <button
                             onClick={(e) => handleSubmit(e)}
                             type="submit"
-                            className="btn btn--primary"
+                            className="btn btn-primary"
                         >
                             <span>Save</span>
                         </button>

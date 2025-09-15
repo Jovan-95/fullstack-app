@@ -1,5 +1,5 @@
-$color-primary: #2563eb;
-$color-secondary: #1e293b;
+$color-primary: #0f6a49;
+$color-secondary: #28906f;
 $color-danger: #dc2626;
 $color-white: #fff;
 $transition-base: 0.3s ease-in-out;
@@ -15,12 +15,21 @@ $padding-x: 1.2rem;
     border-radius: $radius;
     border: none;
     cursor: pointer;
+    background: linear-gradient(90deg, #10b981, #059669);
     transition: background-color $transition-base, color $transition-base,
         border-color $transition-base;
 
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+    }
+
+    span {
+        color: white;
+    }
+
+    &:hover {
+        background: linear-gradient(90deg, #059669, #10b981);
     }
 }
 
@@ -29,7 +38,7 @@ $padding-x: 1.2rem;
     color: $color-white;
 
     &:hover {
-        background-color: #1e4ed8; // malo tamnija nijansa
+        background-color: #059669; // malo tamnija nijansa
     }
 }
 
@@ -38,7 +47,7 @@ $padding-x: 1.2rem;
     color: $color-white;
 
     &:hover {
-        background-color: #111827; // malo tamnija nijansa
+        background-color: #059669; // malo tamnija nijansa
     }
 }
 
