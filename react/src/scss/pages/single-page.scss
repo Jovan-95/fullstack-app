@@ -3,6 +3,9 @@
     justify-content: center;
     padding: 2rem;
 
+    @media screen and (max-width: 425px) {
+        padding: 1rem;
+    }
     .user-card {
         background: #fff;
         padding: 2rem;
@@ -96,6 +99,10 @@
                     &:hover {
                         background: #dc2626;
                     }
+                }
+
+                @media screen and (max-width: 425px) {
+                    width: 100%;
                 }
             }
         }

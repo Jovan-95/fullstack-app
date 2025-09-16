@@ -73,3 +73,30 @@ a {
 .result:last-child {
     margin-bottom: 0; /* uklanja marginu kod poslednjeg elementa */
 }
+
+input[type="file"] {
+    display: none; // sakrij default input
+}
+
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #10b981, #059669);
+    color: #ffffff;
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+        background-color: #16a34a; // tamnija zelena na hover
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}

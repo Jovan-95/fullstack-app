@@ -83,6 +83,7 @@ function Profile() {
             );
 
             showSuccessToast("Avatar successfully updated!");
+            setSelectedFile(null);
         } catch (err: any) {
             showErrorToast(err?.message || "Failed to upload avatar");
         }
@@ -141,18 +142,22 @@ function Profile() {
                             alt="User avatar"
                         />
 
-                        <div>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                            />
+                        <div className="avatar-actions">
+                            <label className="upload-label">
+                                Upload
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                            </label>
+
                             {selectedFile ? (
                                 <button
                                     onClick={handleUpload}
                                     className="btn btn-primary btn-sm change-photo"
                                 >
-                                    Upload
+                                    Save
                                 </button>
                             ) : (
                                 ""
@@ -306,11 +311,10 @@ function Profile() {
                                 value={loggedUser?.email}
                             />
                         </div>
-                        <div
-                            style={{ color: "black" }}
-                            className="input-wrapper"
-                        >
-                            <label>Gender</label>
+
+                        <div style={{ color: "black" }} className="form-group">
+                            <label className="form-label">Gender</label>
+
                             <div
                                 style={{
                                     color: "black",

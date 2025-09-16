@@ -125,7 +125,7 @@ function SingleUser() {
                                     onClick={() => setModal(false)}
                                     className="btn edit mt-16"
                                 >
-                                    Cancel
+                                    <span>Cancel</span>
                                 </button>
                                 <button
                                     onClick={handleUserDelete}

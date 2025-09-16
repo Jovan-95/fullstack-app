@@ -39,7 +39,6 @@ function Header() {
     const [page, setPage] = useState(1);
 
     // Get all HTTP req
-    /* Check BE for name property */
     const {
         data: searchData,
         isLoading,
@@ -105,6 +104,47 @@ function Header() {
                             placeholder="Search..."
                             type="search"
                         />
+                        {/* Global search dp */}
+                        {searchAll ? (
+                            <>
+                                <div className="search-results-wrapper">
+                                    <div
+                                        className="p-20"
+                                        onClick={() => setSearchAll("")}
+                                        style={{
+                                            textAlign: "right",
+                                            cursor: "pointer",
+                                            color: "black",
+                                        }}
+                                    >
+                                        X
+                                    </div>
+                                    <div className="searched-results">
+                                        {searchData?.data.map(
+                                            (searchedUser: SearchedResult) => (
+                                                <NavLink
+                                                    to={`/admin/users/${searchedUser.id}`}
+                                                    key={searchedUser.id}
+                                                >
+                                                    <div className="result">
+                                                        {searchedUser.name}
+                                                    </div>
+                                                </NavLink>
+                                            )
+                                        )}
+                                    </div>
+                                    <Pagination
+                                        currentPage={
+                                            searchData?.meta.current_page
+                                        }
+                                        lastPage={searchData?.meta.last_page}
+                                        onPageChange={(p: number) => setPage(p)}
+                                    />
+                                </div>
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div className="time-wrapper">
                         <div className="time">{formattedDate}</div>
@@ -160,44 +200,6 @@ function Header() {
                         </div>
                     )}
                 </div>
-                {/* Global search modal */}
-                {searchAll ? (
-                    <Modal>
-                        <>
-                            {" "}
-                            <div
-                                className="p-20"
-                                onClick={() => setSearchAll("")}
-                                style={{
-                                    textAlign: "right",
-                                    cursor: "pointer",
-                                    color: "black",
-                                }}
-                            >
-                                X
-                            </div>
-                            <div className="searched-results">
-                                {searchData?.data.map(
-                                    (searchedUser: SearchedResult) => (
-                                        <div
-                                            className="result"
-                                            key={searchedUser.id}
-                                        >
-                                            {searchedUser.name}
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                            <Pagination
-                                currentPage={searchData?.meta.current_page}
-                                lastPage={searchData?.meta.last_page}
-                                onPageChange={(p: number) => setPage(p)}
-                            />
-                        </>
-                    </Modal>
-                ) : (
-                    ""
-                )}
             </div>
 
             {/* Mobile header wrapper */}

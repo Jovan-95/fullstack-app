@@ -15,6 +15,16 @@
                     display: flex;
                     align-items: center;
                     margin-left: 40px;
+                    position: relative;
+
+                    .search-results-wrapper {
+                        background-color: white;
+                        position: absolute;
+                        padding: 16px;
+                        width: 350px;
+                        top: 48px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    }
                     img {
                         margin-right: 8px;
                         cursor: pointer;

@@ -17,6 +17,10 @@
         border-radius: 16px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            padding: 16px;
+        }
         .auth-logo {
             font-size: 32px;
             font-weight: bold;
@@ -37,6 +41,81 @@
 
         .input-wrapper {
             margin-top: 16px;
+
+            .radio-buttons {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .radio-label {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    font-size: 15px;
+                    color: #374151;
+
+                    input[type="radio"] {
+                        display: none;
+                        width: 20px;
+                        height: 20px;
+                        border: 1px solid #22c55e; // muted gray border
+                        border-radius: 50%;
+                        position: relative;
+                        cursor: pointer;
+                        background: #fff;
+                        transition: all 0.2s ease;
+
+                        &:checked {
+                            border-color: #22c55e; // zelena za selektovano
+                        }
+
+                        &:focus {
+                            outline: none;
+                            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+                        }
+                    }
+
+                    .custom-radio {
+                        width: 20px;
+                        height: 20px;
+                        border: 1px solid #22c55e;
+                        border-radius: 50%;
+                        display: inline-block;
+                        position: relative;
+                        transition: all 0.2s ease;
+
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 100%;
+                            background: #22c55e; // zelena unutrašnjost kada je checked
+                            transform: translate(-50%, -50%) scale(0);
+                            transition: transform 0.2s ease;
+                        }
+                    }
+
+                    input[type="radio"]:checked + .custom-radio::after {
+                        transform: translate(-50%, -50%) scale(1);
+                    }
+
+                    &:hover input[type="radio"] + .custom-radio {
+                        border-color: #22c55e;
+                    }
+                }
+            }
+
+            .error-msg {
+                color: #ef4444; // crvena za greške
+                font-size: 0.875rem;
+                margin-top: 4px;
+            }
 
             label {
                 display: block;
@@ -123,11 +202,6 @@
             @media screen and (max-width: 425px) {
                 font-size: 14px;
             }
-        }
-
-        @media screen and (max-width: 425px) {
-            width: auto;
-            padding: 20px;
         }
     }
 }
